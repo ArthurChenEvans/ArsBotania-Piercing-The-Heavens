@@ -19,6 +19,7 @@ public final class DivineArmorSettings {
     private final double terrasteelSetDiscount;
     private final double manaweaveSetDiscount;
     private final double maxToolDiscount;
+    private final double singularityMiningSpeed;
     private final Map<ArmorSlot, Double> pixieChance;
     private final float terrasteelHungerRegen;
     private final int terrasteelHungerRegenIntervalTicks;
@@ -38,6 +39,7 @@ public final class DivineArmorSettings {
         this.terrasteelSetDiscount = b.terrasteelSetDiscount;
         this.manaweaveSetDiscount = b.manaweaveSetDiscount;
         this.maxToolDiscount = b.maxToolDiscount;
+        this.singularityMiningSpeed = b.singularityMiningSpeed;
         this.pixieChance = Map.copyOf(b.pixieChance);
         this.terrasteelHungerRegen = b.terrasteelHungerRegen;
         this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
@@ -63,6 +65,7 @@ public final class DivineArmorSettings {
         b.terrasteelSetDiscount = terrasteelSetDiscount;
         b.manaweaveSetDiscount = manaweaveSetDiscount;
         b.maxToolDiscount = maxToolDiscount;
+        b.singularityMiningSpeed = singularityMiningSpeed;
         b.pixieChance.putAll(pixieChance);
         b.terrasteelHungerRegen = terrasteelHungerRegen;
         b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
@@ -105,6 +108,11 @@ public final class DivineArmorSettings {
     /** Ceiling on the combined Divine tool discount, however the parts add up. */
     public double maxToolDiscount() {
         return maxToolDiscount;
+    }
+
+    /** Singularity mining speed (Botania's Terrasteel tools: 9, netherite: 9). */
+    public double singularityMiningSpeed() {
+        return singularityMiningSpeed;
     }
 
     /** Elementium's chance, per piece, that taking a hit summons a pixie. */
@@ -159,6 +167,7 @@ public final class DivineArmorSettings {
         private double terrasteelSetDiscount = 0.2;
         private double manaweaveSetDiscount = 0.4;
         private double maxToolDiscount = 0.5;
+        private double singularityMiningSpeed = 16;
         // Botania Elementium per-piece pixie chances
         private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
                 ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
@@ -208,6 +217,11 @@ public final class DivineArmorSettings {
 
         public Builder maxToolDiscount(double v) {
             maxToolDiscount = v;
+            return this;
+        }
+
+        public Builder singularityMiningSpeed(double v) {
+            singularityMiningSpeed = v;
             return this;
         }
 
@@ -269,6 +283,7 @@ public final class DivineArmorSettings {
             fraction("terrasteelSetDiscount", terrasteelSetDiscount);
             fraction("manaweaveSetDiscount", manaweaveSetDiscount);
             fraction("maxToolDiscount", maxToolDiscount);
+            if (singularityMiningSpeed <= 0) throw new IllegalArgumentException("singularityMiningSpeed must be positive");
             pixieChance.forEach((slot, v) -> fraction("pixieChance." + slot, v));
             nonNegative("terrasteelHungerRegen", terrasteelHungerRegen);
             positive("terrasteelHungerRegenIntervalTicks", terrasteelHungerRegenIntervalTicks);

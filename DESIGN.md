@@ -10,6 +10,19 @@
   - `./gradlew :mod:runClient` — play it. Jar: `mod/build/libs/`.
 - `libs/` — Botania 1.21.1 jar (no official 1.21.1 release yet).
 
+## Beta 2: the Singularity (so far)
+- One tool that mines as pickaxe, axe, shovel and hoe at netherite level, speed from config
+  (default 16; Botania Terrasteel is 9). No durability.
+- Terra Shatterer at rank S (`ShattererArea`, Botania's rules): 7x7 area, sneak + use toggles it,
+  Ring of Thor adds a rank and the third axis, Stone of Temperance caps it at 3x3.
+- Terra Truncator on tree trunks: handed to Botania's own `TERRA_TRUNCATOR.breakOtherBlock`, so
+  trees fall exactly as Botania cuts them; sneaking breaks a single log.
+- Hooks Botania's `SpecialBlockBreakingHandler` and `SequentialBreaker` (Ring of Loki works).
+- Texture: `tools/singularity_texture.py` draws an animated black hole (32 frames).
+- Not yet: sword/hoe use, Source self-repair, stored Ars spell, Divine Well, the full-set death rule.
+- GameTests use `TestPlayers.survivalServerPlayer`: a server player not joined to the player list,
+  because Curios' join sync fails on the helper's mock connection.
+
 ## Wings (Divine robes = Flügel Tiara)
 - Flight is the tiara's, numbers unchanged (`FlugelFlight`): 1200-tick bar, 35 mana/tick
   (105 once empty), sprint dash with a 40-tick cooldown, sneak glide, Eye of the Flügel works.

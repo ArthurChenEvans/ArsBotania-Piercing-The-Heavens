@@ -16,5 +16,10 @@
   "arsbotania.armorset.divine.name": "Divine Ascension",
   "arsbotania.armorset.divine.discount": "%s%% less Mana cost on Mana Tools and Rods",
   "arsbotania.wings.divine": "Wings: Divine",
-  "tooltip.arsbotania.cycle_wings": "Sneak + use to change wings"
+  "tooltip.arsbotania.cycle_wings": "Sneak + use to change wings",
+  "item.arsbotania.singularity": "The Singularity",
+  "tooltip.arsbotania.singularity.area_on": "Shatters a 7x7 area (rank S)",
+  "tooltip.arsbotania.singularity.area_off": "Area mining off",
+  "tooltip.arsbotania.singularity.trees": "Fells whole trees from the trunk",
+  "tooltip.arsbotania.singularity.toggle": "Sneak + use to toggle area mining"
 }

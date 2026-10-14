@@ -18,7 +18,10 @@ public final class ModCreativeTabs {
         TABS.register("main", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.arsbotania"))
                 .icon(() -> new ItemStack(DivineItems.get(new DivinePiece(ArcanistClass.ARCANIST, ArmorSlot.HEAD))))
-                .displayItems((params, out) -> DivineItems.all().forEach(out::accept))
+                .displayItems((params, out) -> {
+                    DivineItems.all().forEach(out::accept);
+                    out.accept(DivineItems.SINGULARITY.get());
+                })
                 .build());
     }
 

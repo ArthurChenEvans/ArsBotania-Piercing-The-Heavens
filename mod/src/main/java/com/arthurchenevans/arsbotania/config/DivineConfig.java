@@ -20,6 +20,7 @@ public final class DivineConfig {
     private static final ModConfigSpec.DoubleValue TERRASTEEL_SET_DISCOUNT;
     private static final ModConfigSpec.DoubleValue MANAWEAVE_SET_DISCOUNT;
     private static final ModConfigSpec.DoubleValue MAX_TOOL_DISCOUNT;
+    private static final ModConfigSpec.DoubleValue SINGULARITY_SPEED;
     private static final Map<ArmorSlot, ModConfigSpec.DoubleValue> PIXIE_CHANCE = new EnumMap<>(ArmorSlot.class);
     private static final ModConfigSpec.DoubleValue TERRASTEEL_HUNGER_REGEN;
     private static final ModConfigSpec.IntValue TERRASTEEL_HUNGER_REGEN_INTERVAL;
@@ -86,6 +87,11 @@ public final class DivineConfig {
         b.pop();
 
         b.pop();
+
+        b.comment("The Singularity").push("singularity");
+        SINGULARITY_SPEED = b.worldRestart().comment("Mining speed (Botania Terrasteel and netherite tools: 9)")
+                .defineInRange("mining_speed", d.singularityMiningSpeed(), 1, 1000);
+        b.pop();
         SPEC = b.build();
     }
 
@@ -119,6 +125,7 @@ public final class DivineConfig {
                 .terrasteelSetDiscount(TERRASTEEL_SET_DISCOUNT.get())
                 .manaweaveSetDiscount(MANAWEAVE_SET_DISCOUNT.get())
                 .maxToolDiscount(MAX_TOOL_DISCOUNT.get())
+                .singularityMiningSpeed(SINGULARITY_SPEED.get())
                 .terrasteelHungerRegen(TERRASTEEL_HUNGER_REGEN.get().floatValue())
                 .terrasteelHungerRegenIntervalTicks(TERRASTEEL_HUNGER_REGEN_INTERVAL.get())
                 .terrasteelTabletMana(TERRASTEEL_TABLET_MANA.get())

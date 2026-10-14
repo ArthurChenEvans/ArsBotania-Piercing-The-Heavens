@@ -9,6 +9,7 @@ import com.arthurchenevans.arsbotania.core.divine.DivineTier;
 import com.arthurchenevans.arsbotania.item.DivineArmorItem;
 import com.arthurchenevans.arsbotania.item.DivineHoodItem;
 import com.arthurchenevans.arsbotania.item.DivineRobesItem;
+import com.arthurchenevans.arsbotania.item.SingularityItem;
 import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
 import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import net.minecraft.Util;
@@ -45,6 +46,8 @@ public final class DivineItems {
             List.of(new ArmorMaterial.Layer(ArsBotania.prefix("divine"))), 0, 0));
 
     private static final Map<DivinePiece, DeferredHolder<Item, DivineArmorItem>> PIECES = new LinkedHashMap<>();
+
+    public static final DeferredHolder<Item, SingularityItem> SINGULARITY = ITEMS.register("singularity", SingularityItem::new);
 
     static {
         for (DivinePiece piece : DivinePiece.all()) {
