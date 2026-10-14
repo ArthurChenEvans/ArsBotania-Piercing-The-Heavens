@@ -28,5 +28,10 @@
   "tooltip.arsbotania.divine_blade.falling_stars": "Starcaller: stars fall where you swing",
   "tooltip.arsbotania.divine_blade.pixies": "Elementium Sword: more, stronger pixies",
   "tooltip.arsbotania.divine_blade.spell_on_hit": "Enchanter's Sword: casts its spell on hit",
-  "tooltip.arsbotania.divine_blade.lore": "Spacetime will not be bound to a blade."
+  "tooltip.arsbotania.divine_blade.lore": "Spacetime will not be bound to a blade.",
+  "item.arsbotania.divine_grimoire": "Divine Grimoire",
+  "item.arsbotania.divine_rod": "Divine Rod",
+  "tooltip.arsbotania.grimoire.pool": "Short on mana? Draws Source from nearby jars, then Botania mana",
+  "tooltip.arsbotania.rod.cycle": "Sneak + use to change power",
+  "tooltip.arsbotania.combo": "Hold the Grimoire and Rod together: left hand acts first"
 }

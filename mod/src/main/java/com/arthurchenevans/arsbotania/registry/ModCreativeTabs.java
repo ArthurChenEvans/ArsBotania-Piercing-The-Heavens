@@ -22,6 +22,8 @@ public final class ModCreativeTabs {
                     DivineItems.all().forEach(out::accept);
                     out.accept(DivineItems.SINGULARITY.get());
                     out.accept(DivineItems.DIVINE_BLADE.get());
+                    out.accept(DivineItems.DIVINE_GRIMOIRE.get());
+                    out.accept(DivineItems.DIVINE_ROD.get());
                 })
                 .build());
     }

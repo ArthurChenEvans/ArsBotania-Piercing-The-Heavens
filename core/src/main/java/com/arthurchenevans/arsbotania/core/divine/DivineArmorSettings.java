@@ -20,6 +20,9 @@ public final class DivineArmorSettings {
     private final double manaweaveSetDiscount;
     private final double maxToolDiscount;
     private final double singularityMiningSpeed;
+    private final int botaniaManaPerArsMana;
+    private final int sourcePerArsMana;
+    private final int jarRange;
     private final Map<ArmorSlot, Double> pixieChance;
     private final float terrasteelHungerRegen;
     private final int terrasteelHungerRegenIntervalTicks;
@@ -40,6 +43,9 @@ public final class DivineArmorSettings {
         this.manaweaveSetDiscount = b.manaweaveSetDiscount;
         this.maxToolDiscount = b.maxToolDiscount;
         this.singularityMiningSpeed = b.singularityMiningSpeed;
+        this.botaniaManaPerArsMana = b.botaniaManaPerArsMana;
+        this.sourcePerArsMana = b.sourcePerArsMana;
+        this.jarRange = b.jarRange;
         this.pixieChance = Map.copyOf(b.pixieChance);
         this.terrasteelHungerRegen = b.terrasteelHungerRegen;
         this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
@@ -66,6 +72,9 @@ public final class DivineArmorSettings {
         b.manaweaveSetDiscount = manaweaveSetDiscount;
         b.maxToolDiscount = maxToolDiscount;
         b.singularityMiningSpeed = singularityMiningSpeed;
+        b.botaniaManaPerArsMana = botaniaManaPerArsMana;
+        b.sourcePerArsMana = sourcePerArsMana;
+        b.jarRange = jarRange;
         b.pixieChance.putAll(pixieChance);
         b.terrasteelHungerRegen = terrasteelHungerRegen;
         b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
@@ -113,6 +122,21 @@ public final class DivineArmorSettings {
     /** Singularity mining speed (Botania's Terrasteel tools: 9, netherite: 9). */
     public double singularityMiningSpeed() {
         return singularityMiningSpeed;
+    }
+
+    /** Botania mana spent per Ars mana the Divine Grimoire tops up. */
+    public int botaniaManaPerArsMana() {
+        return botaniaManaPerArsMana;
+    }
+
+    /** Source spent per Ars mana the Divine Grimoire tops up from nearby jars. */
+    public int sourcePerArsMana() {
+        return sourcePerArsMana;
+    }
+
+    /** How far (blocks) the Divine Grimoire reaches for Source jars. */
+    public int jarRange() {
+        return jarRange;
     }
 
     /** Elementium's chance, per piece, that taking a hit summons a pixie. */
@@ -168,6 +192,9 @@ public final class DivineArmorSettings {
         private double manaweaveSetDiscount = 0.4;
         private double maxToolDiscount = 0.5;
         private double singularityMiningSpeed = 16;
+        private int botaniaManaPerArsMana = 50;
+        private int sourcePerArsMana = 1;
+        private int jarRange = 6;
         // Botania Elementium per-piece pixie chances
         private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
                 ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
@@ -222,6 +249,21 @@ public final class DivineArmorSettings {
 
         public Builder singularityMiningSpeed(double v) {
             singularityMiningSpeed = v;
+            return this;
+        }
+
+        public Builder botaniaManaPerArsMana(int v) {
+            botaniaManaPerArsMana = v;
+            return this;
+        }
+
+        public Builder sourcePerArsMana(int v) {
+            sourcePerArsMana = v;
+            return this;
+        }
+
+        public Builder jarRange(int v) {
+            jarRange = v;
             return this;
         }
 
@@ -284,6 +326,9 @@ public final class DivineArmorSettings {
             fraction("manaweaveSetDiscount", manaweaveSetDiscount);
             fraction("maxToolDiscount", maxToolDiscount);
             if (singularityMiningSpeed <= 0) throw new IllegalArgumentException("singularityMiningSpeed must be positive");
+            positive("botaniaManaPerArsMana", botaniaManaPerArsMana);
+            positive("sourcePerArsMana", sourcePerArsMana);
+            nonNegative("jarRange", jarRange);
             pixieChance.forEach((slot, v) -> fraction("pixieChance." + slot, v));
             nonNegative("terrasteelHungerRegen", terrasteelHungerRegen);
             positive("terrasteelHungerRegenIntervalTicks", terrasteelHungerRegenIntervalTicks);

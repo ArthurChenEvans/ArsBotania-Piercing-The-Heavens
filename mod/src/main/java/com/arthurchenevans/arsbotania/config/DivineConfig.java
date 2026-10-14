@@ -21,6 +21,9 @@ public final class DivineConfig {
     private static final ModConfigSpec.DoubleValue MANAWEAVE_SET_DISCOUNT;
     private static final ModConfigSpec.DoubleValue MAX_TOOL_DISCOUNT;
     private static final ModConfigSpec.DoubleValue SINGULARITY_SPEED;
+    private static final ModConfigSpec.IntValue BOTANIA_PER_ARS;
+    private static final ModConfigSpec.IntValue SOURCE_PER_ARS;
+    private static final ModConfigSpec.IntValue JAR_RANGE;
     private static final Map<ArmorSlot, ModConfigSpec.DoubleValue> PIXIE_CHANCE = new EnumMap<>(ArmorSlot.class);
     private static final ModConfigSpec.DoubleValue TERRASTEEL_HUNGER_REGEN;
     private static final ModConfigSpec.IntValue TERRASTEEL_HUNGER_REGEN_INTERVAL;
@@ -92,6 +95,15 @@ public final class DivineConfig {
         SINGULARITY_SPEED = b.worldRestart().comment("Mining speed (Botania Terrasteel and netherite tools: 9)")
                 .defineInRange("mining_speed", d.singularityMiningSpeed(), 1, 1000);
         b.pop();
+
+        b.comment("The Divine Grimoire's shared mana pool: tops up Ars mana when a spell would fall short").push("grimoire");
+        BOTANIA_PER_ARS = b.comment("Botania mana spent per Ars mana topped up")
+                .defineInRange("botania_mana_per_ars_mana", d.botaniaManaPerArsMana(), 1, 1_000_000);
+        SOURCE_PER_ARS = b.comment("Source spent per Ars mana topped up from nearby jars")
+                .defineInRange("source_per_ars_mana", d.sourcePerArsMana(), 1, 1_000_000);
+        JAR_RANGE = b.comment("How far (blocks) to look for Source jars; 0 turns jar top-ups off")
+                .defineInRange("jar_range", d.jarRange(), 0, 32);
+        b.pop();
         SPEC = b.build();
     }
 
@@ -126,6 +138,9 @@ public final class DivineConfig {
                 .manaweaveSetDiscount(MANAWEAVE_SET_DISCOUNT.get())
                 .maxToolDiscount(MAX_TOOL_DISCOUNT.get())
                 .singularityMiningSpeed(SINGULARITY_SPEED.get())
+                .botaniaManaPerArsMana(BOTANIA_PER_ARS.get())
+                .sourcePerArsMana(SOURCE_PER_ARS.get())
+                .jarRange(JAR_RANGE.get())
                 .terrasteelHungerRegen(TERRASTEEL_HUNGER_REGEN.get().floatValue())
                 .terrasteelHungerRegenIntervalTicks(TERRASTEEL_HUNGER_REGEN_INTERVAL.get())
                 .terrasteelTabletMana(TERRASTEEL_TABLET_MANA.get())

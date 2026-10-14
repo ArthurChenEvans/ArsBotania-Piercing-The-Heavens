@@ -4,6 +4,9 @@ import com.mojang.authlib.GameProfile;
 import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.Connection;
+import net.minecraft.network.PacketSendListener;
+import net.minecraft.network.protocol.Packet;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
@@ -27,7 +30,16 @@ final class TestPlayers {
         ServerPlayer player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), cookie.gameProfile(), cookie.clientInformation());
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);
-        new ServerGamePacketListenerImpl(helper.getLevel().getServer(), connection, player, cookie);
+        // Drops outgoing packets: there is no client, and mods (Ars, Curios) sync data to players.
+        new ServerGamePacketListenerImpl(helper.getLevel().getServer(), connection, player, cookie) {
+            @Override
+            public void send(Packet<?> packet) {
+            }
+
+            @Override
+            public void send(Packet<?> packet, @Nullable PacketSendListener listener) {
+            }
+        };
         return player;
     }
 }

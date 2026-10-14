@@ -198,13 +198,75 @@ def divine_blade(botania_jar: Path, out_dir: Path):
     print(f"blade  divine_blade: {len(green)} blade px, {len(hilt)} hilt px")
 
 
+def divine_grimoire(item_dir: Path, out_dir: Path):
+    """Ars's spellbook (shipped in 16 dye colours): dyed cover -> pearl, gold fittings -> rainbow."""
+    variants = [Image.open(item_dir / f"spellbook_{dye}.png").convert("RGBA") for dye in DYES]
+    labels = classify(variants)
+    white = variants[DYES.index("white")].load()
+    w, h = variants[0].size
+    cloth_shade = normaliser([luminance(white[p][:3]) for p, l in labels.items() if l == "cloth"])
+    def saturated_gold(rgb):
+        h, l, sat = colorsys.rgb_to_hls(*(c / 255 for c in rgb))
+        return 35 <= h * 360 <= 65 and sat > 0.55 and l < 0.8   # pages are pale and unsaturated
+    gold_px = {p for p, l in labels.items() if l == "fixed" and saturated_gold(white[p][:3])}
+    gold_shade = normaliser([luminance(white[p][:3]) for p in gold_px])
+    frames = []
+    for frame in range(FRAMES):
+        img = Image.new("RGBA", (w, h))
+        out = img.load()
+        for (x, y), label in labels.items():
+            r, g, b, a = white[x, y]
+            if label == "cloth":
+                out[x, y] = (*pearl(cloth_shade(luminance((r, g, b))), x, y), a)
+            elif (x, y) in gold_px:
+                out[x, y] = (*rainbow(gold_shade(luminance((r, g, b))), x, y, frame), a)
+            elif label == "fixed":
+                out[x, y] = (r, g, b, a)
+        frames.append(img)
+    write_animation(out_dir / "textures/item/divine_grimoire.png", frames)
+    print(f"book   divine_grimoire: {len(gold_px)} trim px, {sum(l == 'cloth' for l in labels.values())} cover px")
+
+
+def divine_rod(botania_jar: Path, out_dir: Path):
+    """Botania's Rod of the Lands: the wooden shaft -> gold, the head -> animated rainbow."""
+    with zipfile.ZipFile(botania_jar) as jar:
+        img = Image.open(io.BytesIO(jar.read("assets/botania/textures/item/rod_of_the_lands.png"))).convert("RGBA")
+    px = img.load()
+    w, h = img.size
+    opaque = [(x, y) for y in range(h) for x in range(w) if px[x, y][3] > 0]
+    hls = {p: colorsys.rgb_to_hls(*(c / 255 for c in px[p][:3])) for p in opaque}
+    # The Lands rod is brown all over (its head is a clump of dirt), so split by position:
+    # the head is the block in the top-right corner, the shaft runs diagonally below it.
+    head = [(x, y) for x, y in opaque if x >= 6 and y <= 7]
+    shaft = [p for p in opaque if p not in set(head)]
+    rest = [p for p in opaque if p not in set(shaft) and p not in set(head)]
+    shade = normaliser([luminance(px[p][:3]) for p in opaque])
+    frames = []
+    for frame in range(FRAMES):
+        out_img = Image.new("RGBA", (w, h))
+        out = out_img.load()
+        for x, y in shaft:
+            out[x, y] = (*gold(shade(luminance(px[x, y][:3]))), px[x, y][3])
+        for x, y in head:
+            out[x, y] = (*rainbow(shade(luminance(px[x, y][:3])), x, y, frame), px[x, y][3])
+        for x, y in rest:
+            out[x, y] = (*pearl(shade(luminance(px[x, y][:3])), x, y), px[x, y][3])
+        frames.append(out_img)
+    write_animation(out_dir / "textures/item/divine_rod.png", frames)
+    model = {"parent": "minecraft:item/handheld", "textures": {"layer0": "arsbotania:item/divine_rod"}}
+    (out_dir / "models/item/divine_rod.json").write_text(json.dumps(model, indent=2) + "\n")
+    print(f"rod    divine_rod: {len(shaft)} shaft px, {len(head)} head px, {len(rest)} other px")
+
+
 def main(item_dir: Path, models_dir: Path, out_dir: Path, botania_jar: Path | None):
     out_dir = out_dir / "assets/arsbotania"
     armor_textures(item_dir, out_dir)
     item_icons(item_dir, models_dir, out_dir)
+    divine_grimoire(item_dir, out_dir)
     if botania_jar:
         divine_wings(botania_jar, out_dir)
         divine_blade(botania_jar, out_dir)
+        divine_rod(botania_jar, out_dir)
 
 
 if __name__ == "__main__":

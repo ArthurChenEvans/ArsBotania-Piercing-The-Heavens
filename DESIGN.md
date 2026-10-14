@@ -22,6 +22,22 @@
 - The Singularity is a tool, not a weapon (design call: a black hole that hits would one-shot).
 - Not yet: hoe use, Source self-repair, stored Ars spell, Divine Well, the full-set death rule.
 
+## Beta 2: Divine Grimoire, Divine Rod and combos (replaces the Divine Well)
+No infinite mana: QoL only, everything is paid.
+- **Divine Grimoire**: Ars `SpellBook` at tier THREE, 10 slots (the Archmage's book). Shared pool:
+  `SpellResolverMixin` tops up a short Ars mana bar just before Ars's mana check, buying the gap
+  from Source jars within `jar_range` first (`source_per_ars_mana`), then Botania mana from the
+  player's mana items (`botania_mana_per_ars_mana`, default 50). Never past max mana.
+- **Divine Rod**: all 13 Botania rods (`RodPower`), one selected at a time; sneak + use in the air
+  cycles. Each power runs the Botania rod's own code with the Divine Rod's stack.
+  `BotaniaRodLeftClickMixin` lets the Shifting Crust swap and Shaded Mesa throw (which check for
+  their own item) accept the Divine Rod.
+- **Combos** (`ComboOrder`, `DivineCombos`): hold one in each hand, left acts first. Book left /
+  rod right: the spell is cast, and when it lands (`SpellResolveEvent.Post`) the rod acts there.
+  Rod left / book right: the rod acts on the looked-at block, then the spell resolves straight onto
+  that block (mana checked and spent). Left/right follows the player's handedness setting.
+- Not yet: Ars mana paying for rods (one-way pool for now).
+
 ## Beta 2: the Divine Blade
 The weapon. Terra Blade damage and speed (no stat boost); the other top blades' abilities
 folded in, each run by the original code: Terra Blade beam (`TerraBladeItem.getBurst`, the blade

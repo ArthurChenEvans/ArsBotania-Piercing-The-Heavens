@@ -5,7 +5,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ArmorUpgradeRecipeMixin",
-    "PixieEntityAccessor"
+    "PixieEntityAccessor",
+    "SpellResolverMixin",
+    "BotaniaRodLeftClickMixin$ShiftingCrust",
+    "BotaniaRodLeftClickMixin$ShadedMesa"
   ],
   "injectors": {
     "defaultRequire": 1

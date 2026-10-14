@@ -20,6 +20,13 @@ public final class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
+    /** {@link com.arthurchenevans.arsbotania.core.divine.RodPower} index selected on the Divine Rod. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ROD_POWER =
+            COMPONENTS.register("rod_power", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     private ModDataComponents() {
     }
 

@@ -8,6 +8,8 @@ import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
 import com.arthurchenevans.arsbotania.core.divine.DivineTier;
 import com.arthurchenevans.arsbotania.item.DivineArmorItem;
 import com.arthurchenevans.arsbotania.item.DivineBladeItem;
+import com.arthurchenevans.arsbotania.item.DivineGrimoireItem;
+import com.arthurchenevans.arsbotania.item.DivineRodItem;
 import com.arthurchenevans.arsbotania.item.DivineHoodItem;
 import com.arthurchenevans.arsbotania.item.DivineRobesItem;
 import com.arthurchenevans.arsbotania.item.SingularityItem;
@@ -50,6 +52,8 @@ public final class DivineItems {
 
     public static final DeferredHolder<Item, SingularityItem> SINGULARITY = ITEMS.register("singularity", SingularityItem::new);
     public static final DeferredHolder<Item, DivineBladeItem> DIVINE_BLADE = ITEMS.register("divine_blade", DivineBladeItem::new);
+    public static final DeferredHolder<Item, DivineGrimoireItem> DIVINE_GRIMOIRE = ITEMS.register("divine_grimoire", DivineGrimoireItem::new);
+    public static final DeferredHolder<Item, DivineRodItem> DIVINE_ROD = ITEMS.register("divine_rod", DivineRodItem::new);
 
     static {
         for (DivinePiece piece : DivinePiece.all()) {
