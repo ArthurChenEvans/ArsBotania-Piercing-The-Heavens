@@ -33,6 +33,8 @@ import vazkii.botania.xplat.ClientXplatAbstractions;
 public class DivineWingsLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     public static final ModelResourceLocation DIVINE_WINGS = ModelResourceLocation.standalone(ArsBotania.prefix("item/divine_wings"));
     private static final FlugelTiaraItem.Renderer BOTANIA_WINGS = new FlugelTiaraItem.Renderer();
+    /** Dev-only: lets {@link VisualCheck} try wing layouts without restarting. Null in normal play. */
+    static DivineWingLayout.Pair layoutOverride;
 
     public DivineWingsLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
         super(parent);
@@ -62,7 +64,7 @@ public class DivineWingsLayer extends RenderLayer<AbstractClientPlayer, PlayerMo
         boolean flying = player.getAbilities().flying;
         float tickTime = player.tickCount + partialTicks;
 
-        DivineWingLayout.Pair wings = DivineWingLayout.WINGS;
+        DivineWingLayout.Pair wings = layoutOverride != null ? layoutOverride : DivineWingLayout.WINGS;
         float flap = DivineWingLayout.flap(tickTime, flying);
         float[] root = DivineWingLayout.rootOffset(wings.scale(), wings.tilt());
         ms.pushPose();

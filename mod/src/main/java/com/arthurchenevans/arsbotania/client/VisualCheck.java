@@ -3,6 +3,7 @@ package com.arthurchenevans.arsbotania.client;
 import com.arthurchenevans.arsbotania.ArsBotania;
 import com.arthurchenevans.arsbotania.core.divine.ArcanistClass;
 import com.arthurchenevans.arsbotania.core.divine.ArmorSlot;
+import com.arthurchenevans.arsbotania.core.divine.DivineWingLayout;
 import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
 import net.minecraft.client.CameraType;
@@ -27,6 +28,8 @@ import vazkii.botania.common.item.BotaniaItems;
 @EventBusSubscriber(modid = ArsBotania.MODID, value = Dist.CLIENT)
 public final class VisualCheck {
     private static final String PROPERTY = System.getProperty("arsbotania.visualCheck");
+    private static final String[] SWEEP = System.getProperty("arsbotania.wingSweep") == null
+            ? null : System.getProperty("arsbotania.wingSweep").split(";");
     private static int ticks = -1;
 
     private VisualCheck() {
@@ -58,6 +61,10 @@ public final class VisualCheck {
             mc.options.hideGui = true;
             mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
         }
+        if (SWEEP != null) {
+            sweep(mc);
+            return;
+        }
         if (ticks == 200) shot(mc, "back");
         if (ticks == 210) mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
         if (ticks == 260) shot(mc, "front");
@@ -68,6 +75,28 @@ public final class VisualCheck {
         }
         if (ticks == 330) shot(mc, "flying");
         if (ticks == 340) mc.stop();
+    }
+
+    /**
+     * {@code -Darsbotania.wingSweep=scale:height:tilt;...} photographs each wing layout from
+     * the back and the front, then quits.
+     */
+    private static void sweep(Minecraft mc) {
+        int stage = (ticks - 200) / 30;
+        int step = (ticks - 200) % 30;
+        if (ticks < 200) return;
+        if (stage >= SWEEP.length * 2) {
+            mc.stop();
+            return;
+        }
+        String[] p = SWEEP[stage % SWEEP.length].split(":");
+        if (step == 0) {
+            DivineWingsLayer.layoutOverride = new DivineWingLayout.Pair(Float.parseFloat(p[0]), Float.parseFloat(p[1]), Float.parseFloat(p[2]));
+            mc.options.setCameraType(stage < SWEEP.length ? CameraType.THIRD_PERSON_BACK : CameraType.THIRD_PERSON_FRONT);
+        }
+        if (step == 20) {
+            shot(mc, (stage < SWEEP.length ? "back" : "front") + "_s" + p[0] + "_h" + p[1] + "_t" + p[2]);
+        }
     }
 
     private static void shot(Minecraft mc, String name) {

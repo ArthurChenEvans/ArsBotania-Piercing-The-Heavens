@@ -47,6 +47,7 @@ neoForge {
             client()
             gameDirectory = project.file('run/client')
             systemProperty 'arsbotania.visualCheck', project.findProperty('visualClass') ?: 'sorcerer'
+            if (project.hasProperty('wingSweep')) systemProperty 'arsbotania.wingSweep', project.property('wingSweep')
             programArguments.addAll('--quickPlaySingleplayer', 'visualcheck')
         }
         gameTestServer {
