@@ -2,6 +2,7 @@ package com.arthurchenevans.arsbotania;
 
 import com.arthurchenevans.arsbotania.config.DivineConfig;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
+import com.arthurchenevans.arsbotania.registry.ModDataComponents;
 import com.arthurchenevans.arsbotania.registry.ModCreativeTabs;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -16,6 +17,7 @@ public class ArsBotania {
 
     public ArsBotania(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, DivineConfig.SPEC);
+        ModDataComponents.register(modBus);
         DivineItems.register(modBus);
         ModCreativeTabs.register(modBus);
         modBus.addListener(DivineConfig::onLoad);

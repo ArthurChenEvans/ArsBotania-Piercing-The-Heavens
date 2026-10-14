@@ -7,12 +7,17 @@
 Cloth is found the same way analyze_ars_palette.py does: Ars ships each armor
 texture in 16 dye colours, and any pixel that differs between them is cloth.
 
-Usage: python3 tools/divine_recolor.py <ars textures/item dir> <ars models/item dir> <mod resources dir>
+Divine wings are Botania's Flügel wing (read from the Botania jar) recoloured the same
+way: pearl feathers with an animated rainbow edge.
+
+Usage: python3 tools/divine_recolor.py <ars textures/item dir> <ars models/item dir> <mod resources dir> [botania jar]
 """
 import colorsys
 import json
 import math
+import io
 import sys
+import zipfile
 from pathlib import Path
 
 from PIL import Image
@@ -132,11 +137,38 @@ def item_icons(item_dir: Path, models_dir: Path, out_dir: Path):
             print(f"icon   divine_{cls}_{slot}: {', '.join(layers)}")
 
 
-def main(item_dir: Path, models_dir: Path, out_dir: Path):
+def divine_wings(botania_jar: Path, out_dir: Path):
+    """Flügel wing: feathers -> pearl, the outermost ring of feathers -> rainbow."""
+    with zipfile.ZipFile(botania_jar) as jar:
+        img = Image.open(io.BytesIO(jar.read("assets/botania/textures/item/tiara_wing_1.png"))).convert("RGBA")
+    px = img.load()
+    w, h = img.size
+    opaque = {(x, y) for y in range(h) for x in range(w) if px[x, y][3] > 0}
+    edge = {(x, y) for x, y in opaque
+            if any((x + dx, y + dy) not in opaque for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))}
+    shade = normaliser([luminance(px[p][:3]) for p in opaque])
+    frames = []
+    for frame in range(FRAMES):
+        out_img = Image.new("RGBA", (w, h))
+        out = out_img.load()
+        for x, y in opaque:
+            r, g, b, a = px[x, y]
+            s = shade(luminance((r, g, b)))
+            out[x, y] = (*(rainbow(s, x, y, frame) if (x, y) in edge else pearl(s, x, y)), a)
+        frames.append(out_img)
+    write_animation(out_dir / "textures/item/divine_wings.png", frames)
+    model = {"parent": "minecraft:item/generated", "textures": {"layer0": "arsbotania:item/divine_wings"}}
+    (out_dir / "models/item/divine_wings.json").write_text(json.dumps(model, indent=2) + "\n")
+    print(f"wings  divine_wings: {len(edge)} edge px, {len(opaque) - len(edge)} feather px")
+
+
+def main(item_dir: Path, models_dir: Path, out_dir: Path, botania_jar: Path | None):
     out_dir = out_dir / "assets/arsbotania"
     armor_textures(item_dir, out_dir)
     item_icons(item_dir, models_dir, out_dir)
+    if botania_jar:
+        divine_wings(botania_jar, out_dir)
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
+    main(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]), Path(sys.argv[4]) if len(sys.argv) > 4 else None)

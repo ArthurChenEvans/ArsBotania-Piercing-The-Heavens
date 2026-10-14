@@ -8,6 +8,7 @@ import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
 import com.arthurchenevans.arsbotania.core.divine.DivineTier;
 import com.arthurchenevans.arsbotania.item.DivineArmorItem;
 import com.arthurchenevans.arsbotania.item.DivineHoodItem;
+import com.arthurchenevans.arsbotania.item.DivineRobesItem;
 import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
 import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import net.minecraft.Util;
@@ -47,9 +48,11 @@ public final class DivineItems {
 
     static {
         for (DivinePiece piece : DivinePiece.all()) {
-            PIECES.put(piece, ITEMS.register(piece.registryName(), () -> piece.slot() == ArmorSlot.HEAD
-                    ? new DivineHoodItem(piece, DIVINE_MATERIAL)
-                    : new DivineArmorItem(piece, DIVINE_MATERIAL)));
+            PIECES.put(piece, ITEMS.register(piece.registryName(), () -> switch (piece.slot()) {
+                case HEAD -> new DivineHoodItem(piece, DIVINE_MATERIAL);
+                case CHEST -> new DivineRobesItem(piece, DIVINE_MATERIAL);
+                default -> new DivineArmorItem(piece, DIVINE_MATERIAL);
+            }));
         }
     }
 

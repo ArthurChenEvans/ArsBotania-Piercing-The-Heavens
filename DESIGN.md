@@ -10,6 +10,16 @@
   - `./gradlew :mod:runClient` — play it. Jar: `mod/build/libs/`.
 - `libs/` — Botania 1.21.1 jar (no official 1.21.1 release yet).
 
+## Wings (Divine robes = Flügel Tiara)
+- Flight is the tiara's, numbers unchanged (`FlugelFlight`): 1200-tick bar, 35 mana/tick
+  (105 once empty), sprint dash with a 40-tick cooldown, sneak glide, Eye of the Flügel works.
+  Botania hard-codes its tiara, so `DivineFlightEvents` mirrors its per-tick logic on both sides
+  with the robes as the item (tracked per player UUID).
+- Wing style (`WingStyle`, stored in `arsbotania:wing_style`): sneak + use cycles
+  Divine → none → Botania's eight craftable styles. Botania styles render through Botania's own
+  `FlugelTiaraItem.Renderer`; Divine wings are Botania's Flügel wing recoloured (pearl, rainbow
+  edge, full bright, with the Flügel halo). The flight bar is Botania's HUD code.
+
 ## Look
 Divine has one look, no dye colours: pearl-white cloth with an animated rainbow trim, on the
 same Ars Nouveau models. Textures are generated from Ars's own art:

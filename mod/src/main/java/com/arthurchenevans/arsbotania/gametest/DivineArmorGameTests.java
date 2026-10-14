@@ -7,6 +7,10 @@ import com.arthurchenevans.arsbotania.core.divine.ArmorSlot;
 import com.arthurchenevans.arsbotania.core.divine.DivineArmorSettings;
 import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
+import com.arthurchenevans.arsbotania.core.divine.FlugelFlight;
+import com.arthurchenevans.arsbotania.core.divine.WingStyle;
+import com.arthurchenevans.arsbotania.item.DivineRobesItem;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.player.Player;
@@ -149,5 +153,65 @@ public class DivineArmorGameTests {
         target.hurt(player.damageSources().playerAttack(player), 2f);
 
         helper.succeedWhen(() -> helper.assertTrue(target.hasEffect(MobEffects.WITHER), "Karil should wither the target"));
+    }
+
+    private static Player flyerWithMana(GameTestHelper helper, int mana) {
+        Player player = playerWearing(helper, 4);
+        ItemStack tablet = new ItemStack(BotaniaItems.MANA_TABLET);
+        tablet.set(BotaniaDataComponents.MANA, mana);
+        player.getInventory().setItem(0, tablet);
+        return player;
+    }
+
+    @GameTest(template = EMPTY)
+    public static void robesGrantTiaraFlightWhenThereIsMana(GameTestHelper helper) {
+        Player player = flyerWithMana(helper, 100_000);
+
+        player.tick();
+
+        helper.assertTrue(player.getAbilities().mayfly, "Divine robes should allow flight");
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY)
+    public static void robesDoNotFlyWithoutMana(GameTestHelper helper) {
+        Player player = flyerWithMana(helper, 0);
+
+        player.tick();
+
+        helper.assertFalse(player.getAbilities().mayfly, "no mana, no flight");
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY, timeoutTicks = 100)
+    public static void flyingDrainsTheFlightBarAndMana(GameTestHelper helper) {
+        Player player = flyerWithMana(helper, 100_000);
+        player.tick();
+        player.getAbilities().flying = true;
+
+        helper.onEachTick(player::tick);
+        helper.runAfterDelay(20, () -> {
+            ItemStack robes = player.getItemBySlot(EquipmentSlot.CHEST);
+            int left = robes.getOrDefault(BotaniaDataComponents.REMAINING_TICKS, FlugelFlight.MAX_FLIGHT_TIME);
+            int mana = player.getInventory().getItem(0).getOrDefault(BotaniaDataComponents.MANA, 0);
+            helper.assertTrue(left < FlugelFlight.MAX_FLIGHT_TIME, "flight bar should drain, was " + left);
+            helper.assertTrue(mana < 100_000, "flying should cost mana, tablet has " + mana);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY)
+    public static void sneakUseCyclesTheWingStyle(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack robes = new ItemStack(DivineItems.get(new DivinePiece(ArcanistClass.SORCERER, ArmorSlot.CHEST)));
+        player.setItemInHand(InteractionHand.MAIN_HAND, robes);
+        player.setShiftKeyDown(true);
+
+        robes.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+
+        ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
+        helper.assertTrue(held.getItem() instanceof DivineRobesItem, "sneak-use must not equip the robes");
+        helper.assertTrue(DivineRobesItem.wingStyle(held) == WingStyle.NONE, "Divine wings should cycle to none");
+        helper.succeed();
     }
 }
