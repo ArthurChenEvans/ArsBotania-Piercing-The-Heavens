@@ -19,7 +19,18 @@
   trees fall exactly as Botania cuts them; sneaking breaks a single log.
 - Hooks Botania's `SpecialBlockBreakingHandler` and `SequentialBreaker` (Ring of Loki works).
 - Texture: `tools/singularity_texture.py` draws an animated black hole (32 frames).
-- Not yet: sword/hoe use, Source self-repair, stored Ars spell, Divine Well, the full-set death rule.
+- The Singularity is a tool, not a weapon (design call: a black hole that hits would one-shot).
+- Not yet: hoe use, Source self-repair, stored Ars spell, Divine Well, the full-set death rule.
+
+## Beta 2: the Divine Blade
+The weapon. Terra Blade damage and speed (no stat boost); the other top blades' abilities
+folded in, each run by the original code: Terra Blade beam (`TerraBladeItem.getBurst`, the blade
+is the burst's lens and delegates to the Terra Blade; air swings use a small client packet),
+Thundercaller chain lightning (`THUNDERCALLER.hurtEnemy`), Starcaller falling stars
+(`STARCALLER.inventoryTick`), Elementium Sword pixies (+5% chance attribute, +2 pixie damage via
+the pixie accessor), and the Enchanter's Sword's spell on hit (Ars `ICasterTool`, Touch added on
+scribing). Unbreakable. Look: Terra Blade recoloured pearl, rainbow edge, gold hilt. Lore: spacetime
+will not bind to a weapon.
 - GameTests use `TestPlayers.survivalServerPlayer`: a server player not joined to the player list,
   because Curios' join sync fails on the helper's mock connection.
 

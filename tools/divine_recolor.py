@@ -162,12 +162,49 @@ def divine_wings(botania_jar: Path, out_dir: Path):
     print(f"wings  divine_wings: {len(edge)} edge px, {len(opaque) - len(edge)} feather px")
 
 
+def gold(shade):
+    """Gold ramp for hilts and guards, keeping the source's shading."""
+    r, g, b = colorsys.hls_to_rgb(0.12, 0.28 + 0.5 * shade, 0.85)
+    return int(r * 255), int(g * 255), int(b * 255)
+
+
+def divine_blade(botania_jar: Path, out_dir: Path):
+    """Botania's Terra Blade: light greens -> pearl, dark green outline -> rainbow, brown hilt -> gold."""
+    with zipfile.ZipFile(botania_jar) as jar:
+        img = Image.open(io.BytesIO(jar.read("assets/botania/textures/item/terra_blade.png"))).convert("RGBA")
+    px = img.load()
+    w, h = img.size
+    opaque = [(x, y) for y in range(h) for x in range(w) if px[x, y][3] > 0]
+    hls = {p: colorsys.rgb_to_hls(*(c / 255 for c in px[p][:3])) for p in opaque}
+    green = [p for p in opaque if 70 <= hls[p][0] * 360 <= 170]
+    hilt = [p for p in opaque if p not in set(green)]
+    green_shade = normaliser([luminance(px[p][:3]) for p in green])
+    hilt_shade = normaliser([luminance(px[p][:3]) for p in hilt])
+    frames = []
+    for frame in range(FRAMES):
+        out_img = Image.new("RGBA", (w, h))
+        out = out_img.load()
+        for x, y in green:
+            a = px[x, y][3]
+            s = green_shade(luminance(px[x, y][:3]))
+            # darkest greens are the blade's outline: they carry the rainbow
+            out[x, y] = (*(rainbow(0.55 + 0.45 * s, x, y, frame) if hls[(x, y)][1] < 0.3 else pearl(s, x, y)), a)
+        for x, y in hilt:
+            out[x, y] = (*gold(hilt_shade(luminance(px[x, y][:3]))), px[x, y][3])
+        frames.append(out_img)
+    write_animation(out_dir / "textures/item/divine_blade.png", frames)
+    model = {"parent": "minecraft:item/handheld", "textures": {"layer0": "arsbotania:item/divine_blade"}}
+    (out_dir / "models/item/divine_blade.json").write_text(json.dumps(model, indent=2) + "\n")
+    print(f"blade  divine_blade: {len(green)} blade px, {len(hilt)} hilt px")
+
+
 def main(item_dir: Path, models_dir: Path, out_dir: Path, botania_jar: Path | None):
     out_dir = out_dir / "assets/arsbotania"
     armor_textures(item_dir, out_dir)
     item_icons(item_dir, models_dir, out_dir)
     if botania_jar:
         divine_wings(botania_jar, out_dir)
+        divine_blade(botania_jar, out_dir)
 
 
 if __name__ == "__main__":

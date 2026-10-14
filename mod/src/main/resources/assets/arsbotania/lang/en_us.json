@@ -21,5 +21,12 @@
   "tooltip.arsbotania.singularity.area_on": "Shatters a 7x7 area (rank S)",
   "tooltip.arsbotania.singularity.area_off": "Area mining off",
   "tooltip.arsbotania.singularity.trees": "Fells whole trees from the trunk",
-  "tooltip.arsbotania.singularity.toggle": "Sneak + use to toggle area mining"
+  "tooltip.arsbotania.singularity.toggle": "Sneak + use to toggle area mining",
+  "item.arsbotania.divine_blade": "Divine Blade",
+  "tooltip.arsbotania.divine_blade.terra_beam": "Terra Blade: a mana beam on every full swing",
+  "tooltip.arsbotania.divine_blade.chain_lightning": "Thundercaller: lightning chains between enemies",
+  "tooltip.arsbotania.divine_blade.falling_stars": "Starcaller: stars fall where you swing",
+  "tooltip.arsbotania.divine_blade.pixies": "Elementium Sword: more, stronger pixies",
+  "tooltip.arsbotania.divine_blade.spell_on_hit": "Enchanter's Sword: casts its spell on hit",
+  "tooltip.arsbotania.divine_blade.lore": "Spacetime will not be bound to a blade."
 }

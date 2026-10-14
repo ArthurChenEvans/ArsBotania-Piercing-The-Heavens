@@ -6,11 +6,13 @@ import com.arthurchenevans.arsbotania.core.divine.AncientWill;
 import com.arthurchenevans.arsbotania.core.divine.BotaniaSetBonuses;
 import com.arthurchenevans.arsbotania.core.divine.Bonuses;
 import com.arthurchenevans.arsbotania.core.divine.CritOutcome;
+import com.arthurchenevans.arsbotania.core.divine.DivineBlade;
 import com.arthurchenevans.arsbotania.core.divine.DivineArmorSettings;
 import com.arthurchenevans.arsbotania.core.divine.DivineBonuses;
 import com.arthurchenevans.arsbotania.core.divine.DivineLoadout;
 import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
 import com.arthurchenevans.arsbotania.core.divine.HealthRegen;
+import com.arthurchenevans.arsbotania.item.DivineBladeItem;
 import com.arthurchenevans.arsbotania.item.DivineHoodItem;
 import com.arthurchenevans.arsbotania.mixin.PixieEntityAccessor;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
@@ -121,7 +123,13 @@ public final class DivineArmorEvents {
     public static void onPixieSpawn(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide() || !(event.getEntity() instanceof PixieEntity pixie) || pixie.isGaia()) return;
         PixieEntityAccessor access = (PixieEntityAccessor) pixie;
-        if (access.arsbotania$getEffect() != null || !(access.arsbotania$getSummoner() instanceof Player player)) return;
+        if (!(access.arsbotania$getSummoner() instanceof Player player)) return;
+
+        // Elementium Sword bonus: Botania only checks for its own sword, so the Divine Blade adds it here.
+        if (player.getMainHandItem().getItem() instanceof DivineBladeItem) {
+            access.arsbotania$setDamage(DivineBlade.pixieDamage(true));
+        }
+        if (access.arsbotania$getEffect() != null) return;
 
         if (new BotaniaSetBonuses(DivineConfig.settings()).pixiesApplyPotions(DivineItems.loadoutOf(player))) {
             pixie.setApplyPotionEffect(PIXIE_POTIONS.get(player.getRandom().nextInt(PIXIE_POTIONS.size())).get());
