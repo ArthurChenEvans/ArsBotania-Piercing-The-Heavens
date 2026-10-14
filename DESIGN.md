@@ -18,7 +18,7 @@
 - Wing style (`WingStyle`, stored in `arsbotania:wing_style`): sneak + use cycles
   Divine → none → Botania's eight craftable styles. Botania styles render through Botania's own
   `FlugelTiaraItem.Renderer`; Divine wings are one pair of Botania's Flügel wing recoloured
-  (pearl, rainbow edge, full bright), scale 2.6 vs Botania's 1.5, tilted -20 so the tips sweep
+  (pearl, rainbow edge, full bright), scale 2.3 vs Botania's 1.5, tilted -20 so the tips sweep
   diagonally up (Botania's -60 lies flat), under a rainbow-cycling Flügel halo. Calibrated from
   screenshots: `./gradlew :mod:runVisualCheck -PwingSweep=scale:height:tilt;...` (needs a world
   named `visualcheck` in `mod/run/client/saves`; runs headless under `xvfb-run`). The flight bar is Botania's HUD code.
