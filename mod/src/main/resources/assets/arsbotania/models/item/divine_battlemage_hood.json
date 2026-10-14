@@ -1,3 +1,7 @@
 {
-  "parent": "ars_nouveau:item/battlemage_hood"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/divine/battlemage_hood_base",
+    "layer1": "arsbotania:item/divine/battlemage_hood_trim"
+  }
 }

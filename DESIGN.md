@@ -10,6 +10,16 @@
   - `./gradlew :mod:runClient` — play it. Jar: `mod/build/libs/`.
 - `libs/` — Botania 1.21.1 jar (no official 1.21.1 release yet).
 
+## Look
+Divine has one look, no dye colours: pearl-white cloth with an animated rainbow trim, on the
+same Ars Nouveau models. Textures are generated from Ars's own art:
+- `tools/analyze_ars_palette.py` — finds the dyed cloth (pixels that differ across Ars's 16
+  dye variants) and reports the fixed colours (gold trim, grey metal, outlines).
+- `tools/divine_recolor.py` — cloth → pearl (keeps shading), gold → 16-frame rainbow strip
+  with `.mcmeta`; writes armor textures, item icon layers and item models.
+  Re-run after tweaking: `python3 tools/divine_recolor.py <ars textures/item> <ars models/item> mod/src/main/resources`.
+- `DivineArmorRenderer` swaps the texture on Ars's renderer; GeckoLib animates it.
+
 ## References (1.21.1)
 | Mod | Source |
 |---|---|

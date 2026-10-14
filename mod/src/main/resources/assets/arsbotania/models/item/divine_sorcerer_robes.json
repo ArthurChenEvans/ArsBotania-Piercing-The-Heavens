@@ -1,3 +1,7 @@
 {
-  "parent": "ars_nouveau:item/sorcerer_robes"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/divine/sorcerer_robes_base",
+    "layer1": "arsbotania:item/divine/sorcerer_robes_trim"
+  }
 }

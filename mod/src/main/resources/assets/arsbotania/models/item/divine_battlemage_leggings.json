@@ -1,3 +1,7 @@
 {
-  "parent": "ars_nouveau:item/battlemage_leggings"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/divine/battlemage_leggings_base",
+    "layer1": "arsbotania:item/divine/battlemage_leggings_trim"
+  }
 }

@@ -1,3 +1,6 @@
 {
-  "parent": "ars_nouveau:item/sorcerer_leggings"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/divine/sorcerer_leggings_base"
+  }
 }

@@ -1,3 +1,6 @@
 {
-  "parent": "ars_nouveau:item/battlemage_boots"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/divine/battlemage_boots_base"
+  }
 }

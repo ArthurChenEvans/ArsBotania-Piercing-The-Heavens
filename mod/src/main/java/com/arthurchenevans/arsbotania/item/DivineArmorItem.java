@@ -1,6 +1,7 @@
 package com.arthurchenevans.arsbotania.item;
 
 import com.arthurchenevans.arsbotania.ArsBotania;
+import com.arthurchenevans.arsbotania.client.DivineArmorRenderer;
 import com.arthurchenevans.arsbotania.config.DivineConfig;
 import com.arthurchenevans.arsbotania.core.divine.ArcanistClass;
 import com.arthurchenevans.arsbotania.core.divine.ArmorSlot;
@@ -23,7 +24,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -44,6 +48,9 @@ import vazkii.botania.common.handler.PixieHandler;
 import vazkii.botania.common.proxy.Proxy;
 
 import java.util.List;
+import java.util.function.Consumer;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 /**
  * A Divine armor piece. Built on Ars Nouveau's armor so threads, dyeing and the
@@ -77,14 +84,43 @@ public class DivineArmorItem extends AnimatedMagicArmor implements ManaDiscountA
         };
     }
 
-    /** Same GeckoLib model Ars uses for the base class. */
-    private static GenericModel<AnimatedMagicArmor> arsModel(ArcanistClass cls) {
-        String name = switch (cls) {
+    /** Ars's name for the armor model each class uses. */
+    public static String arsArmorName(ArcanistClass cls) {
+        return switch (cls) {
             case SORCERER -> "light_armor";
             case ARCANIST -> "medium_armor";
             case BATTLEMAGE -> "heavy_armor";
         };
+    }
+
+    /** The animated Divine armor texture for a class (pearl cloth, rainbow trim). */
+    public static ResourceLocation textureFor(ArcanistClass cls) {
+        return ArsBotania.prefix("textures/armor/divine_" + arsArmorName(cls) + ".png");
+    }
+
+    /** Same GeckoLib model Ars uses for the base class; the texture is swapped by the renderer. */
+    private static GenericModel<AnimatedMagicArmor> arsModel(ArcanistClass cls) {
+        String name = arsArmorName(cls);
         return new GenericModel<AnimatedMagicArmor>(name, "item/" + name).withEmptyAnim();
+    }
+
+    @Override
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
+            private GeoArmorRenderer<?> renderer;
+
+            @Override
+            public <T extends LivingEntity> HumanoidModel<?> getGeoArmorRenderer(@Nullable T entity, ItemStack stack, @Nullable EquipmentSlot slot, @Nullable HumanoidModel<T> original) {
+                if (renderer == null) renderer = new DivineArmorRenderer(getArmorModel(), piece.arcanistClass());
+                return renderer;
+            }
+        });
+    }
+
+    /** The vanilla armor layer path; GeckoLib draws the armor, but this keeps texture lookups pointed at Divine. */
+    @Override
+    public @Nullable ResourceLocation getArmorTexture(@NotNull ItemStack stack, @NotNull Entity entity, @NotNull EquipmentSlot slot, ArmorMaterial.@NotNull Layer layer, boolean innerModel) {
+        return textureFor(piece.arcanistClass());
     }
 
     @Override
