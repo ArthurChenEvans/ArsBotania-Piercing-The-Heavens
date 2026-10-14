@@ -70,7 +70,8 @@ class BotaniaSetBonusesTest {
 
         assertEquals(0.2, s.terrasteelSetDiscount(), 1e-9);
         assertEquals(0.4, s.manaweaveSetDiscount(), 1e-9);
-        assertEquals(4 * s.botaniaToolDiscountPerPiece() + 0.2 + 0.4, full.botaniaToolDiscount(), 1e-9);
+        // Together they exceed the 50% cap, so a full set lands exactly on it.
+        assertEquals(s.maxToolDiscount(), full.botaniaToolDiscount(), 1e-9);
     }
 
     @Test

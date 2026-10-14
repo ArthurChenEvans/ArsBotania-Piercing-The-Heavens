@@ -18,6 +18,7 @@ public final class DivineArmorSettings {
     private final double botaniaToolDiscountPerPiece;
     private final double terrasteelSetDiscount;
     private final double manaweaveSetDiscount;
+    private final double maxToolDiscount;
     private final Map<ArmorSlot, Double> pixieChance;
     private final float terrasteelHungerRegen;
     private final int terrasteelHungerRegenIntervalTicks;
@@ -36,6 +37,7 @@ public final class DivineArmorSettings {
         this.botaniaToolDiscountPerPiece = b.botaniaToolDiscountPerPiece;
         this.terrasteelSetDiscount = b.terrasteelSetDiscount;
         this.manaweaveSetDiscount = b.manaweaveSetDiscount;
+        this.maxToolDiscount = b.maxToolDiscount;
         this.pixieChance = Map.copyOf(b.pixieChance);
         this.terrasteelHungerRegen = b.terrasteelHungerRegen;
         this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
@@ -60,6 +62,7 @@ public final class DivineArmorSettings {
         b.botaniaToolDiscountPerPiece = botaniaToolDiscountPerPiece;
         b.terrasteelSetDiscount = terrasteelSetDiscount;
         b.manaweaveSetDiscount = manaweaveSetDiscount;
+        b.maxToolDiscount = maxToolDiscount;
         b.pixieChance.putAll(pixieChance);
         b.terrasteelHungerRegen = terrasteelHungerRegen;
         b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
@@ -97,6 +100,11 @@ public final class DivineArmorSettings {
     /** Manaweave's full-set tool discount. */
     public double manaweaveSetDiscount() {
         return manaweaveSetDiscount;
+    }
+
+    /** Ceiling on the combined Divine tool discount, however the parts add up. */
+    public double maxToolDiscount() {
+        return maxToolDiscount;
     }
 
     /** Elementium's chance, per piece, that taking a hit summons a pixie. */
@@ -150,6 +158,7 @@ public final class DivineArmorSettings {
         // Botania full-set values: Terrasteel 20%, Manaweave 40%
         private double terrasteelSetDiscount = 0.2;
         private double manaweaveSetDiscount = 0.4;
+        private double maxToolDiscount = 0.5;
         // Botania Elementium per-piece pixie chances
         private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
                 ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
@@ -194,6 +203,11 @@ public final class DivineArmorSettings {
 
         public Builder manaweaveSetDiscount(double v) {
             manaweaveSetDiscount = v;
+            return this;
+        }
+
+        public Builder maxToolDiscount(double v) {
+            maxToolDiscount = v;
             return this;
         }
 
@@ -254,6 +268,7 @@ public final class DivineArmorSettings {
             fraction("botaniaToolDiscountPerPiece", botaniaToolDiscountPerPiece);
             fraction("terrasteelSetDiscount", terrasteelSetDiscount);
             fraction("manaweaveSetDiscount", manaweaveSetDiscount);
+            fraction("maxToolDiscount", maxToolDiscount);
             pixieChance.forEach((slot, v) -> fraction("pixieChance." + slot, v));
             nonNegative("terrasteelHungerRegen", terrasteelHungerRegen);
             positive("terrasteelHungerRegenIntervalTicks", terrasteelHungerRegenIntervalTicks);

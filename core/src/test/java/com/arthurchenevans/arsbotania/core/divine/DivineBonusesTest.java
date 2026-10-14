@@ -54,12 +54,34 @@ class DivineBonusesTest {
     }
 
     @Test
-    void fullSetAddsTheSetBonusOnTopOfThePieces() {
+    void fullSetDiscountIsCappedAtFiftyPercent() {
         Bonuses b = DivineBonuses.of(fullSet(ArcanistClass.BATTLEMAGE), defaults);
 
         assertTrue(b.isFullSet());
-        assertEquals(4 * defaults.botaniaToolDiscountPerPiece() + defaults.terrasteelSetDiscount() + defaults.manaweaveSetDiscount(),
-                b.botaniaToolDiscount(), 1e-9);
+        assertEquals(0.5, defaults.maxToolDiscount(), 1e-9);
+        assertEquals(0.5, b.botaniaToolDiscount(), 1e-9);
+    }
+
+    @Test
+    void raisingTheCapLetsTheSetBonusesStack() {
+        DivineArmorSettings uncapped = defaults.toBuilder().maxToolDiscount(1.0).build();
+
+        assertEquals(4 * 0.05 + 0.2 + 0.4, DivineBonuses.of(fullSet(ArcanistClass.BATTLEMAGE), uncapped).botaniaToolDiscount(), 1e-9);
+    }
+
+    @Test
+    void reportedDiscountsNeverAddUpPastTheCap() {
+        // Botania sums every piece's report, so the cap must hold across the four reports.
+        DivineLoadout full = fullSet(ArcanistClass.SORCERER);
+        double sum = 0;
+        for (ArmorSlot slot : ArmorSlot.values()) sum += DivineBonuses.discountReportedBy(slot, full, defaults);
+
+        assertEquals(0.5, sum, 1e-9);
+    }
+
+    @Test
+    void capMustBeAFraction() {
+        assertThrows(IllegalArgumentException.class, () -> defaults.toBuilder().maxToolDiscount(1.5).build());
     }
 
     @Test
@@ -77,6 +99,7 @@ class DivineBonusesTest {
     @Test
     void toolDiscountNeverExceedsOneHundredPercent() {
         DivineArmorSettings greedy = defaults.toBuilder()
+                .maxToolDiscount(1.0)
                 .botaniaToolDiscountPerPiece(0.5)
                 .build();
 
@@ -119,6 +142,7 @@ class DivineBonusesTest {
     @Test
     void onlyTheHelmetCarriesTheFullSetDiscount() {
         DivineLoadout full = fullSet(ArcanistClass.ARCANIST);
+        DivineArmorSettings defaults = this.defaults.toBuilder().maxToolDiscount(1.0).build();
 
         assertEquals(defaults.botaniaToolDiscountPerPiece() + defaults.terrasteelSetDiscount() + defaults.manaweaveSetDiscount(),
                 DivineBonuses.discountReportedBy(ArmorSlot.HEAD, full, defaults), 1e-9);

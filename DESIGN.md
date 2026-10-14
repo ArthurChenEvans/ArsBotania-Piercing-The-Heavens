@@ -55,4 +55,7 @@ Pattern taken from All the Arcanist Gear's `AddonArmorItem`:
   the Ars attribute separately.
 - Full set = any 4 Divine pieces, classes may be mixed. Set bonuses need the full set;
   partial sets get per-piece bonuses only (defence, mana, per-piece discount, pixie chance).
-- Discounts stack like Botania stacks armor: per piece 5% x4 + Terrasteel 20% + Manaweave 40% = 80%.
+- Combined tool discount is capped at 50% (`max_tool_discount`). The parts (5% per piece,
+  Terrasteel 20%, Manaweave 40%) would add to 80%, so a full set sits on the cap; each piece's
+  report to Botania is scaled so Botania's sum is exactly the cap. The tooltip shows one
+  combined line instead of Botania's separate 20% and 40% lines.

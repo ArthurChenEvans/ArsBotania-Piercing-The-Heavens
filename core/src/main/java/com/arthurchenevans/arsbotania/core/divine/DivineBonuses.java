@@ -18,7 +18,7 @@ public final class DivineBonuses {
 
         boolean full = loadout.isFullSet();
         double setDiscount = full ? setDiscount(s) : 0;
-        double discount = Math.min(1.0, pieces * s.botaniaToolDiscountPerPiece() + setDiscount);
+        double discount = Math.min(s.maxToolDiscount(), uncappedDiscount(loadout, s));
 
         return new Bonuses(
                 full,
@@ -42,7 +42,13 @@ public final class DivineBonuses {
         if (loadout.in(slot).isEmpty()) return 0;
         double discount = s.botaniaToolDiscountPerPiece();
         if (slot == ArmorSlot.HEAD && loadout.isFullSet()) discount += setDiscount(s);
-        return discount;
+        // Scale every report down by the same factor so Botania's sum lands on the cap.
+        double total = uncappedDiscount(loadout, s);
+        return total > s.maxToolDiscount() ? discount * s.maxToolDiscount() / total : discount;
+    }
+
+    private static double uncappedDiscount(DivineLoadout loadout, DivineArmorSettings s) {
+        return loadout.count() * s.botaniaToolDiscountPerPiece() + (loadout.isFullSet() ? setDiscount(s) : 0);
     }
 
     private static double setDiscount(DivineArmorSettings s) {

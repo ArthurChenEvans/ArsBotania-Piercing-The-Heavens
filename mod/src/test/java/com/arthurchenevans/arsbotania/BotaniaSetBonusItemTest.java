@@ -79,12 +79,24 @@ class BotaniaSetBonusItemTest {
         List<String> keys = keys(DivineSetTooltip.lines(stack(ArmorSlot.CHEST), 2));
 
         assertTrue(keys.containsAll(List.of(
-                "botania.armorset.terrasteel.desc0",
+                "arsbotania.armorset.divine.discount",
                 "botania.armorset.terrasteel.desc1",
                 "botania.armorset.terrasteel.desc2",
-                "botania.armorset.manaweave.desc0",
                 "botania.armorset.manaweave.desc1",
                 "botania.armorset.elementium.desc")), keys.toString());
+    }
+
+    @Test
+    void setTooltipShowsTheCappedDiscountNotBotaniasSeparateOnes() {
+        List<Component> lines = DivineSetTooltip.lines(stack(ArmorSlot.CHEST), 4);
+        List<String> keys = keys(lines);
+
+        assertFalse(keys.contains("botania.armorset.terrasteel.desc0"), "Botania's 20% line no longer applies");
+        assertFalse(keys.contains("botania.armorset.manaweave.desc0"), "Botania's 40% line no longer applies");
+        TranslatableContents discount = lines.stream()
+                .map(c -> findKey(c, "arsbotania.armorset.divine.discount"))
+                .filter(java.util.Objects::nonNull).findFirst().orElseThrow();
+        assertArrayEquals(new Object[]{"50"}, discount.getArgs());
     }
 
     @Test

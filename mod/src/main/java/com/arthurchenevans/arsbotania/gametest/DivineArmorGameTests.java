@@ -71,7 +71,7 @@ public class DivineArmorGameTests {
         float full = ManaItemHandler.instance().getFullDiscountForTools(playerWearing(helper, 4), ItemStack.EMPTY);
         float two = ManaItemHandler.instance().getFullDiscountForTools(playerWearing(helper, 2), ItemStack.EMPTY);
 
-        float expectedFull = (float) (4 * s.botaniaToolDiscountPerPiece() + s.terrasteelSetDiscount() + s.manaweaveSetDiscount());
+        float expectedFull = (float) s.maxToolDiscount(); // the parts add up past the 50% cap
         float expectedTwo = (float) (2 * s.botaniaToolDiscountPerPiece());
         helper.assertTrue(Math.abs(full - expectedFull) < 1e-4, "full set discount " + full + " != " + expectedFull);
         helper.assertTrue(Math.abs(two - expectedTwo) < 1e-4, "partial discount " + two + " != " + expectedTwo);

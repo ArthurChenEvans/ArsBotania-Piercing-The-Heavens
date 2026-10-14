@@ -19,6 +19,7 @@ public final class DivineConfig {
     private static final ModConfigSpec.DoubleValue BOTANIA_DISCOUNT;
     private static final ModConfigSpec.DoubleValue TERRASTEEL_SET_DISCOUNT;
     private static final ModConfigSpec.DoubleValue MANAWEAVE_SET_DISCOUNT;
+    private static final ModConfigSpec.DoubleValue MAX_TOOL_DISCOUNT;
     private static final Map<ArmorSlot, ModConfigSpec.DoubleValue> PIXIE_CHANCE = new EnumMap<>(ArmorSlot.class);
     private static final ModConfigSpec.DoubleValue TERRASTEEL_HUNGER_REGEN;
     private static final ModConfigSpec.IntValue TERRASTEEL_HUNGER_REGEN_INTERVAL;
@@ -54,6 +55,8 @@ public final class DivineConfig {
                 .defineInRange("terrasteel_set_tool_discount", d.terrasteelSetDiscount(), 0, 1);
         MANAWEAVE_SET_DISCOUNT = b.comment("Manaweave set bonus: tool discount for wearing all four Divine pieces")
                 .defineInRange("manaweave_set_tool_discount", d.manaweaveSetDiscount(), 0, 1);
+        MAX_TOOL_DISCOUNT = b.comment("Cap on the combined Divine tool discount (per piece + Terrasteel + Manaweave)")
+                .defineInRange("max_tool_discount", d.maxToolDiscount(), 0, 1);
         TERRASTEEL_HUNGER_REGEN = b.comment("Terrasteel set bonus: health healed even when not full on food")
                 .defineInRange("terrasteel_hunger_regen", d.terrasteelHungerRegen(), 0, 1000);
         TERRASTEEL_HUNGER_REGEN_INTERVAL = b.defineInRange("terrasteel_hunger_regen_interval_ticks", d.terrasteelHungerRegenIntervalTicks(), 1, 72000);
@@ -115,6 +118,7 @@ public final class DivineConfig {
                 .botaniaToolDiscountPerPiece(BOTANIA_DISCOUNT.get())
                 .terrasteelSetDiscount(TERRASTEEL_SET_DISCOUNT.get())
                 .manaweaveSetDiscount(MANAWEAVE_SET_DISCOUNT.get())
+                .maxToolDiscount(MAX_TOOL_DISCOUNT.get())
                 .terrasteelHungerRegen(TERRASTEEL_HUNGER_REGEN.get().floatValue())
                 .terrasteelHungerRegenIntervalTicks(TERRASTEEL_HUNGER_REGEN_INTERVAL.get())
                 .terrasteelTabletMana(TERRASTEEL_TABLET_MANA.get())
