@@ -28,7 +28,7 @@ import vazkii.botania.xplat.ClientXplatAbstractions;
 
 /**
  * Draws wings on players wearing Divine robes. Botania's styles go through Botania's own
- * Flügel Tiara renderer; Divine wings are three bigger pairs of recoloured Flügel wings.
+ * Flügel Tiara renderer; Divine wings are a bigger, upswept pair of recoloured Flügel wings.
  */
 public class DivineWingsLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     public static final ModelResourceLocation DIVINE_WINGS = ModelResourceLocation.standalone(ArsBotania.prefix("item/divine_wings"));
@@ -55,32 +55,31 @@ public class DivineWingsLayer extends RenderLayer<AbstractClientPlayer, PlayerMo
         }
     }
 
-    /** Three pairs of Divine wings, archangel style, then a rainbow version of the Flügel halo. */
+    /** One big pair of Divine wings, tips raised diagonally, then a rainbow version of the Flügel halo. */
     private void renderDivine(AbstractClientPlayer player, ItemStack robes, PoseStack ms, MultiBufferSource buffers, int light, float partialTicks) {
         BakedModel model = Minecraft.getInstance().getModelManager().getModel(DIVINE_WINGS);
         ClientXplatAbstractions.INSTANCE.markSpriteActive(model.getParticleIcon());
         boolean flying = player.getAbilities().flying;
         float tickTime = player.tickCount + partialTicks;
 
-        for (DivineWingLayout.Pair pair : DivineWingLayout.PAIRS) {
-            float flap = DivineWingLayout.flap(pair, tickTime, flying);
+        DivineWingLayout.Pair wings = DivineWingLayout.WINGS;
+        float flap = DivineWingLayout.flap(tickTime, flying);
+        float[] root = DivineWingLayout.rootOffset(wings.scale(), wings.tilt());
+        ms.pushPose();
+        getParentModel().body.translateAndRotate(ms);
+        ms.translate(0, wings.height(), 0.2);
+        for (int side = 0; side < 2; side++) {
             ms.pushPose();
-            getParentModel().body.translateAndRotate(ms);
-            ms.translate(0, pair.height(), 0.2);
-            for (int side = 0; side < 2; side++) {
-                ms.pushPose();
-                ms.mulPose(Axis.YP.rotationDegrees(side == 0 ? flap : 180 - flap));
-                // Botania pivots its 1.5-scale wing one block out; keep the root at the spine as it grows.
-                ms.translate(-pair.scale() / 1.5f, 0, 0);
-                ms.mulPose(Axis.ZP.rotationDegrees(pair.tilt()));
-                ms.scale(pair.scale(), -pair.scale(), -pair.scale());
-                // Full brightness: Divine wings glow.
-                Minecraft.getInstance().getItemRenderer().render(robes, ItemDisplayContext.NONE, false, ms, buffers,
-                        0xF000F0, OverlayTexture.NO_OVERLAY, model);
-                ms.popPose();
-            }
+            ms.mulPose(Axis.YP.rotationDegrees(side == 0 ? flap : 180 - flap));
+            ms.translate(root[0], root[1], 0);
+            ms.mulPose(Axis.ZP.rotationDegrees(wings.tilt()));
+            ms.scale(wings.scale(), -wings.scale(), -wings.scale());
+            // Full brightness: Divine wings glow.
+            Minecraft.getInstance().getItemRenderer().render(robes, ItemDisplayContext.NONE, false, ms, buffers,
+                    0xF000F0, OverlayTexture.NO_OVERLAY, model);
             ms.popPose();
         }
+        ms.popPose();
 
         ms.pushPose();
         renderRainbowHalo(ms, buffers, tickTime);

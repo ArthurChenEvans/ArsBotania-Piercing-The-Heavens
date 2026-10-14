@@ -42,6 +42,13 @@ neoForge {
             programArgument '--nogui'
             gameDirectory = project.file('run/server')
         }
+        // Headless look check: ./gradlew :mod:runVisualCheck -PvisualClass=sorcerer (see VisualCheck)
+        visualCheck {
+            client()
+            gameDirectory = project.file('run/client')
+            systemProperty 'arsbotania.visualCheck', project.findProperty('visualClass') ?: 'sorcerer'
+            programArguments.addAll('--quickPlaySingleplayer', 'visualcheck')
+        }
         gameTestServer {
             type = 'gameTestServer'
             gameDirectory = project.file('run/gametest')
