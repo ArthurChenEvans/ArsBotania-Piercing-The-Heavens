@@ -30,4 +30,15 @@ public final class DivineBonuses {
                 setDiscount
         );
     }
+
+    /**
+     * The discount one worn piece reports to Botania, which sums them across armor slots.
+     * The full-set bonus rides on the helmet so it is counted exactly once.
+     */
+    public static double discountReportedBy(ArmorSlot slot, DivineLoadout loadout, DivineArmorSettings s) {
+        if (loadout.in(slot).isEmpty()) return 0;
+        double discount = s.botaniaToolDiscountPerPiece();
+        if (slot == ArmorSlot.HEAD && loadout.isFullSet()) discount += s.fullSetBotaniaToolDiscount();
+        return discount;
+    }
 }

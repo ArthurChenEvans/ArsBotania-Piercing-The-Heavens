@@ -4,7 +4,10 @@
 - `core/` — game rules with no Minecraft classes. Every number is a config value
   (`DivineArmorSettings`). Covered by sociable JUnit tests: real objects, no mocks.
   Run with `./gradlew :core:test`.
-- `mod/` (next) — NeoForge 1.21.1 glue: items, config spec, events. Thin; calls into `core`.
+- `mod/` — NeoForge 1.21.1 glue: items, config spec, events, one mixin. Thin; calls into `core`.
+  - `./gradlew :mod:test` — sociable unit tests inside a bootstrapped NeoForge with Ars + Botania loaded.
+  - `./gradlew :mod:runGameTestServer` — in-world GameTests on a real player.
+  - `./gradlew :mod:runClient` — play it. Jar: `mod/build/libs/`.
 - `libs/` — Botania 1.21.1 jar (no official 1.21.1 release yet).
 
 ## References (1.21.1)
@@ -28,6 +31,11 @@ Pattern taken from All the Arcanist Gear's `AddonArmorItem`:
   `ManaItemHandler.dispatchManaExact`.
 - **Health regen:** `HealthRegen` pulses every `healthRegenIntervalTicks`.
 - **Defence:** defaults match Terrasteel (3/8/6/3, toughness 3).
+
+- **Tier lock:** a mixin on Ars `ArmorUpgradeRecipe.doesReagentMatch` rejects Divine pieces;
+  without it Ars would accept them (any tier-0 perk holder matches) and push the tier past the slot list.
+- **Beta 1 access:** creative tab only (the requirement allows creative tab or a temporary recipe).
+- **Config:** `config/arsbotania-common.toml`.
 
 ### Interpretation calls (change if wrong)
 - "Passive mana regen" = Botania mana into the player's mana items. Ars mana regen comes from

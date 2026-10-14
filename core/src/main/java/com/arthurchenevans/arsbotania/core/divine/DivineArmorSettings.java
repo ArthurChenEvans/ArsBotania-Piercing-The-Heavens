@@ -22,7 +22,6 @@ public final class DivineArmorSettings {
     private final int arsMaxManaPerPiece;
     private final double arsManaRegenPerPiece;
     private final List<Integer> threadSlotLevels;
-    private final int temporaryRecipeSourceCost;
 
     private DivineArmorSettings(Builder b) {
         this.defence = Map.copyOf(b.defence);
@@ -35,7 +34,6 @@ public final class DivineArmorSettings {
         this.arsMaxManaPerPiece = b.arsMaxManaPerPiece;
         this.arsManaRegenPerPiece = b.arsManaRegenPerPiece;
         this.threadSlotLevels = List.copyOf(b.threadSlotLevels);
-        this.temporaryRecipeSourceCost = b.temporaryRecipeSourceCost;
     }
 
     public static DivineArmorSettings defaults() {
@@ -54,7 +52,6 @@ public final class DivineArmorSettings {
         b.arsMaxManaPerPiece = arsMaxManaPerPiece;
         b.arsManaRegenPerPiece = arsManaRegenPerPiece;
         b.threadSlotLevels = threadSlotLevels;
-        b.temporaryRecipeSourceCost = temporaryRecipeSourceCost;
         return b;
     }
 
@@ -98,10 +95,6 @@ public final class DivineArmorSettings {
         return threadSlotLevels;
     }
 
-    public int temporaryRecipeSourceCost() {
-        return temporaryRecipeSourceCost;
-    }
-
     public static final class Builder {
         // Terrasteel values (Botania 1.21.1 BotaniaArmorMaterials.TERRASTEEL)
         private final Map<ArmorSlot, Integer> defence = new EnumMap<>(Map.of(
@@ -115,7 +108,6 @@ public final class DivineArmorSettings {
         private int arsMaxManaPerPiece = 200;
         private double arsManaRegenPerPiece = 4;
         private List<Integer> threadSlotLevels = List.of(3, 3, 3);
-        private int temporaryRecipeSourceCost = 10_000;
 
         private Builder() {
         }
@@ -170,11 +162,6 @@ public final class DivineArmorSettings {
             return this;
         }
 
-        public Builder temporaryRecipeSourceCost(int v) {
-            temporaryRecipeSourceCost = v;
-            return this;
-        }
-
         public DivineArmorSettings build() {
             defence.forEach((slot, v) -> nonNegative("defence." + slot, v));
             nonNegative("toughnessPerPiece", toughnessPerPiece);
@@ -192,7 +179,6 @@ public final class DivineArmorSettings {
                     throw new IllegalArgumentException("thread slot level must be 1-" + MAX_ARS_SLOT_LEVEL + ", got " + level);
                 }
             }
-            nonNegative("temporaryRecipeSourceCost", temporaryRecipeSourceCost);
             return new DivineArmorSettings(this);
         }
 

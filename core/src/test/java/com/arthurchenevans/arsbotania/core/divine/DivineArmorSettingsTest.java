@@ -36,11 +36,4 @@ class DivineArmorSettingsTest {
         assertThrows(IllegalArgumentException.class, () -> b.threadSlotLevels(List.of(4)).build());
         assertThrows(IllegalArgumentException.class, () -> b.threadSlotLevels(List.of(0)).build());
     }
-
-    @Test
-    void temporaryRecipeCostIsTunable() {
-        DivineArmorSettings s = DivineArmorSettings.defaults().toBuilder().temporaryRecipeSourceCost(123).build();
-
-        assertEquals(123, s.temporaryRecipeSourceCost());
-    }
 }

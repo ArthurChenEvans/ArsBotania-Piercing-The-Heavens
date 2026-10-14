@@ -66,9 +66,10 @@ neoForge {
 
 dependencies {
     implementation("com.hollingsworth.ars_nouveau:ars_nouveau-1.21.1:${ars_version}") {
-        // Optional integrations hosted on CurseForge's maven; not needed here.
+        // Optional integrations Ars only uses when installed; their mavens are not needed here.
         exclude group: 'curse.maven'
         exclude group: 'mezz.jei'
+        exclude group: 'com.github.glitchfiend' // TerraBlender
     }
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"

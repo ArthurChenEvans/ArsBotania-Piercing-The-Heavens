@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.arthurchenevans.arsbotania.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ArmorUpgradeRecipeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

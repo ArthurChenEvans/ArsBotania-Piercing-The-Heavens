@@ -106,4 +106,32 @@ class DivineBonusesTest {
 
         assertThrows(IllegalArgumentException.class, () -> b.wear(ArmorSlot.HEAD, boots));
     }
+
+    @Test
+    void perPieceDiscountsReportedToBotaniaAddUpToTheTotal() {
+        // Botania asks every worn piece for its discount and sums them.
+        DivineLoadout full = fullSet(ArcanistClass.ARCANIST);
+        double sum = 0;
+        for (ArmorSlot slot : ArmorSlot.values()) sum += DivineBonuses.discountReportedBy(slot, full, defaults);
+
+        assertEquals(DivineBonuses.of(full, defaults).botaniaToolDiscount(), sum, 1e-9);
+    }
+
+    @Test
+    void onlyTheHelmetCarriesTheFullSetDiscount() {
+        DivineLoadout full = fullSet(ArcanistClass.ARCANIST);
+
+        assertEquals(defaults.botaniaToolDiscountPerPiece() + defaults.fullSetBotaniaToolDiscount(),
+                DivineBonuses.discountReportedBy(ArmorSlot.HEAD, full, defaults), 1e-9);
+        assertEquals(defaults.botaniaToolDiscountPerPiece(),
+                DivineBonuses.discountReportedBy(ArmorSlot.CHEST, full, defaults), 1e-9);
+    }
+
+    @Test
+    void anEmptySlotReportsNoDiscount() {
+        DivineLoadout chestOnly = DivineLoadout.builder()
+                .wear(new DivinePiece(ArcanistClass.SORCERER, ArmorSlot.CHEST)).build();
+
+        assertEquals(0, DivineBonuses.discountReportedBy(ArmorSlot.HEAD, chestOnly, defaults), 1e-9);
+    }
 }
