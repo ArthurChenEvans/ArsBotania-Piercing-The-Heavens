@@ -133,4 +133,47 @@ class BotaniaSetBonusItemTest {
         }
         return null;
     }
+
+    /** A tooltip flag as the client builds it, with or without Shift held. */
+    private static net.minecraft.world.item.TooltipFlag flag(boolean shift) {
+        return new net.minecraft.world.item.TooltipFlag() {
+            @Override
+            public boolean isAdvanced() {
+                return false;
+            }
+
+            @Override
+            public boolean isCreative() {
+                return false;
+            }
+
+            @Override
+            public boolean hasShiftDown() {
+                return shift;
+            }
+        };
+    }
+
+    private static List<Component> hover(ItemStack stack, boolean shift) {
+        List<Component> lines = new ArrayList<>();
+        stack.getItem().appendHoverText(stack, net.minecraft.world.item.Item.TooltipContext.EMPTY, lines, flag(shift));
+        return lines;
+    }
+
+    @Test
+    void hoverWithoutShiftShowsDivineAndTheShiftHint() {
+        List<String> keys = keys(hover(stack(ArmorSlot.CHEST), false));
+
+        assertTrue(keys.contains("tooltip.arsbotania.divine"), keys.toString());
+        assertTrue(keys.contains("botaniamisc.shiftinfo"), keys.toString());
+        assertFalse(keys.contains("botaniamisc.armorset"), keys.toString());
+    }
+
+    @Test
+    void hoverWithShiftShowsTheSetBonuses() {
+        List<Component> lines = hover(stack(ArmorSlot.CHEST), true);
+
+        assertTrue(lines.stream().anyMatch(c -> findKey(c, "botaniamisc.armorset") != null));
+        assertTrue(keys(lines).contains("botania.armorset.elementium.desc"));
+    }
 }
