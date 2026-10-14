@@ -28,17 +28,29 @@ class DivineWingLayoutTest {
         assertTrue(elevation >= 25f && elevation <= 50f, "tip elevation " + elevation);
     }
 
+    /** Where the wing root (the texture's bottom-right corner) ends up, mirroring the render transform. */
+    private static double[] rootAfterTransform(float scale, float tilt, float[] offset) {
+        // Item models are centred: the texture spans -0.5..0.5. Scale flips y.
+        double x = 0.5 * scale, y = -0.5 * -scale;
+        double rad = Math.toRadians(tilt);
+        return new double[]{x * Math.cos(rad) - y * Math.sin(rad) + offset[0], x * Math.sin(rad) + y * Math.cos(rad) + offset[1]};
+    }
+
+    @Test
+    void botaniasOwnPlacementPutsTheRootOnTheSpine() {
+        // Botania: scale 1.5, tilt -60, a fixed one block shift. Lands within a few hundredths of the pivot.
+        double[] root = rootAfterTransform(1.5f, -60f, new float[]{-1f, 0f});
+        assertEquals(0, root[0], 0.05);
+        assertEquals(0, Math.abs(root[1]), 0.3);
+    }
+
     @Test
     void wingRootSitsOnTheSpineWhateverTheSizeAndTilt() {
-        // The texture's wing root is its bottom-right corner; after offset, rotation and scale it must land at x=0, y=0.
-        for (float tilt : new float[]{-60f, -10f, 0f}) {
+        for (float tilt : new float[]{-60f, -10f, 0f, 20f}) {
             for (float scale : new float[]{1.5f, 2.6f}) {
-                float[] offset = DivineWingLayout.rootOffset(scale, tilt);
-                double rad = Math.toRadians(tilt);
-                double rootX = scale * Math.cos(rad) + offset[0];
-                double rootY = scale * Math.sin(rad) + offset[1];
-                assertEquals(0, rootX, 1e-4, "x at tilt " + tilt + " scale " + scale);
-                assertEquals(0, rootY, 1e-4, "y at tilt " + tilt + " scale " + scale);
+                double[] root = rootAfterTransform(scale, tilt, DivineWingLayout.rootOffset(scale, tilt));
+                assertEquals(0, root[0], 1e-4, "x at tilt " + tilt + " scale " + scale);
+                assertEquals(0, root[1], 1e-4, "y at tilt " + tilt + " scale " + scale);
             }
         }
     }

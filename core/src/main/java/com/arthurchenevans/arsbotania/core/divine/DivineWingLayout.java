@@ -34,8 +34,10 @@ public final class DivineWingLayout {
      * bottom-right corner, on the spine. Botania's fixed -1 only lines up at its own size.
      */
     public static float[] rootOffset(float scale, float tilt) {
+        // Item models are centred, so the root corner is at (0.5, -0.5); the y-flipping scale makes it (s/2, s/2).
         double rad = Math.toRadians(tilt);
-        return new float[]{(float) (-scale * Math.cos(rad)), (float) (-scale * Math.sin(rad))};
+        double x = 0.5 * scale, y = 0.5 * scale;
+        return new float[]{(float) -(x * Math.cos(rad) - y * Math.sin(rad)), (float) -(x * Math.sin(rad) + y * Math.cos(rad))};
     }
 
     /** Botania's Flügel flap formula. */
