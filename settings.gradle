@@ -1,0 +1,5 @@
+rootProject.name = 'ArsBotania-Piercing-The-Heavens'
+
+// Pure game rules, no Minecraft classes. Unit-tested on its own so the
+// rules can be checked without starting the game.
+include 'core'
