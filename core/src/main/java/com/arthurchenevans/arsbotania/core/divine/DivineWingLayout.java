@@ -19,7 +19,7 @@ public final class DivineWingLayout {
     public record Pair(float scale, float height, float tilt) {
     }
 
-    public static final Pair WINGS = new Pair(2.6f, 0.3f, -10f);
+    public static final Pair WINGS = new Pair(2.6f, 0.3f, -20f);
 
     private DivineWingLayout() {
     }

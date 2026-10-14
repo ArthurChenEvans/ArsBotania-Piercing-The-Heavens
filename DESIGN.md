@@ -17,9 +17,11 @@
   with the robes as the item (tracked per player UUID).
 - Wing style (`WingStyle`, stored in `arsbotania:wing_style`): sneak + use cycles
   Divine → none → Botania's eight craftable styles. Botania styles render through Botania's own
-  `FlugelTiaraItem.Renderer`; Divine wings are three pairs (archangel style, `DivineWingLayout`,
-  scales 2.2/1.9/1.6 vs Botania's 1.5) of Botania's Flügel wing recoloured (pearl, rainbow edge,
-  full bright), flapping out of step, under a rainbow-cycling Flügel halo. The flight bar is Botania's HUD code.
+  `FlugelTiaraItem.Renderer`; Divine wings are one pair of Botania's Flügel wing recoloured
+  (pearl, rainbow edge, full bright), scale 2.6 vs Botania's 1.5, tilted -20 so the tips sweep
+  diagonally up (Botania's -60 lies flat), under a rainbow-cycling Flügel halo. Calibrated from
+  screenshots: `./gradlew :mod:runVisualCheck -PwingSweep=scale:height:tilt;...` (needs a world
+  named `visualcheck` in `mod/run/client/saves`; runs headless under `xvfb-run`). The flight bar is Botania's HUD code.
 
 ## Look
 Divine has one look, no dye colours: pearl-white cloth with an animated rainbow trim, on the
