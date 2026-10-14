@@ -10,12 +10,14 @@ public final class DivineBonuses {
         if (pieces == 0) return Bonuses.NONE;
 
         int armor = 0;
+        double pixieChance = 0;
         for (DivinePiece piece : loadout.pieces()) {
             armor += s.defence(piece.slot());
+            pixieChance += s.pixieChance(piece.slot());
         }
 
         boolean full = loadout.isFullSet();
-        double setDiscount = full ? s.fullSetBotaniaToolDiscount() : 0;
+        double setDiscount = full ? setDiscount(s) : 0;
         double discount = Math.min(1.0, pieces * s.botaniaToolDiscountPerPiece() + setDiscount);
 
         return new Bonuses(
@@ -27,18 +29,23 @@ public final class DivineBonuses {
                 pieces * s.healthRegenPerPiece(),
                 pieces * s.arsMaxManaPerPiece(),
                 pieces * s.arsManaRegenPerPiece(),
-                setDiscount
+                setDiscount,
+                Math.min(1.0, pixieChance)
         );
     }
 
     /**
      * The discount one worn piece reports to Botania, which sums them across armor slots.
-     * The full-set bonus rides on the helmet so it is counted exactly once.
+     * The full-set bonuses ride on the helmet so it is counted exactly once.
      */
     public static double discountReportedBy(ArmorSlot slot, DivineLoadout loadout, DivineArmorSettings s) {
         if (loadout.in(slot).isEmpty()) return 0;
         double discount = s.botaniaToolDiscountPerPiece();
-        if (slot == ArmorSlot.HEAD && loadout.isFullSet()) discount += s.fullSetBotaniaToolDiscount();
+        if (slot == ArmorSlot.HEAD && loadout.isFullSet()) discount += setDiscount(s);
         return discount;
+    }
+
+    private static double setDiscount(DivineArmorSettings s) {
+        return s.terrasteelSetDiscount() + s.manaweaveSetDiscount();
     }
 }

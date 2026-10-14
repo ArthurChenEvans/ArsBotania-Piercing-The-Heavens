@@ -30,6 +30,19 @@ Pattern taken from All the Arcanist Gear's `AddonArmorItem`:
 - **Botania mana regen:** each tick, push `botaniaManaPerTick` into the wearer's mana items via
   `ManaItemHandler.dispatchManaExact`.
 - **Health regen:** `HealthRegen` pulses every `healthRegenIntervalTicks`.
+- **Botania set bonuses (full Divine set, Botania's own numbers, all configurable):**
+  - Terrasteel: 20% tool discount, heals 1 every 80 ticks while hungry (0 < food < 18),
+    10 mana into mana tablets every 10 ticks, Ancient Wills on the hood.
+  - Manaweave: 40% tool discount, rod proficiency (`ManaProficiencyArmor`).
+  - Elementium: per-piece pixie chance via Botania's `pixie_spawn_chance` attribute
+    (.11/.17/.15/.09), and full-set pixies apply potions.
+  - Tooltip: shift shows a Botania-style "Armor Set" block reusing Botania's lines.
+- **Ancient Wills:** the hood is an `AncientWillContainer`, so Botania's own will recipe works.
+  Botania's will effects are hard-wired to its Terrasteel helmet, so Divine re-applies them:
+  `CriticalHitEvent` (Dharok multiplier, remember target) then `LivingIncomingDamageEvent`
+  (Ahrim/Torag/Karil effects, Guthan heal, Verac zeroes armor reduction).
+- **Potion pixies:** Botania only adds potions for its Elementium set; an accessor mixin on
+  `PixieEntity` lets Divine add one when the summoner wears the full Divine set.
 - **Defence:** defaults match Terrasteel (3/8/6/3, toughness 3).
 
 - **Tier lock:** a mixin on Ars `ArmorUpgradeRecipe.doesReagentMatch` rejects Divine pieces;
@@ -40,5 +53,6 @@ Pattern taken from All the Arcanist Gear's `AddonArmorItem`:
 ### Interpretation calls (change if wrong)
 - "Passive mana regen" = Botania mana into the player's mana items. Ars mana regen comes from
   the Ars attribute separately.
-- Full set = any 4 Divine pieces, classes may be mixed. Full set adds a configurable extra
-  Botania discount (`fullSetBotaniaToolDiscount`); everything else is per piece.
+- Full set = any 4 Divine pieces, classes may be mixed. Set bonuses need the full set;
+  partial sets get per-piece bonuses only (defence, mana, per-piece discount, pixie chance).
+- Discounts stack like Botania stacks armor: per piece 5% x4 + Terrasteel 20% + Manaweave 40% = 80%.

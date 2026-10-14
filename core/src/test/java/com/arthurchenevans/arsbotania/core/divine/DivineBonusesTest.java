@@ -50,7 +50,7 @@ class DivineBonusesTest {
         assertEquals(2 * defaults.healthRegenPerPiece(), b.healthPerRegenPulse(), 1e-9);
         assertEquals(2 * defaults.arsMaxManaPerPiece(), b.arsMaxMana());
         assertEquals(2 * defaults.arsManaRegenPerPiece(), b.arsManaRegen(), 1e-9);
-        assertEquals(0, b.fullSetExtraDiscount(), 1e-9);
+        assertEquals(0, b.setDiscount(), 1e-9);
     }
 
     @Test
@@ -58,7 +58,7 @@ class DivineBonusesTest {
         Bonuses b = DivineBonuses.of(fullSet(ArcanistClass.BATTLEMAGE), defaults);
 
         assertTrue(b.isFullSet());
-        assertEquals(4 * defaults.botaniaToolDiscountPerPiece() + defaults.fullSetBotaniaToolDiscount(),
+        assertEquals(4 * defaults.botaniaToolDiscountPerPiece() + defaults.terrasteelSetDiscount() + defaults.manaweaveSetDiscount(),
                 b.botaniaToolDiscount(), 1e-9);
     }
 
@@ -78,7 +78,6 @@ class DivineBonusesTest {
     void toolDiscountNeverExceedsOneHundredPercent() {
         DivineArmorSettings greedy = defaults.toBuilder()
                 .botaniaToolDiscountPerPiece(0.5)
-                .fullSetBotaniaToolDiscount(0.5)
                 .build();
 
         assertEquals(1.0, DivineBonuses.of(fullSet(ArcanistClass.SORCERER), greedy).botaniaToolDiscount(), 1e-9);
@@ -121,7 +120,7 @@ class DivineBonusesTest {
     void onlyTheHelmetCarriesTheFullSetDiscount() {
         DivineLoadout full = fullSet(ArcanistClass.ARCANIST);
 
-        assertEquals(defaults.botaniaToolDiscountPerPiece() + defaults.fullSetBotaniaToolDiscount(),
+        assertEquals(defaults.botaniaToolDiscountPerPiece() + defaults.terrasteelSetDiscount() + defaults.manaweaveSetDiscount(),
                 DivineBonuses.discountReportedBy(ArmorSlot.HEAD, full, defaults), 1e-9);
         assertEquals(defaults.botaniaToolDiscountPerPiece(),
                 DivineBonuses.discountReportedBy(ArmorSlot.CHEST, full, defaults), 1e-9);

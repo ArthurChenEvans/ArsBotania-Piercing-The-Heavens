@@ -4,6 +4,7 @@ import com.arthurchenevans.arsbotania.ArsBotania;
 import com.arthurchenevans.arsbotania.config.DivineConfig;
 import com.arthurchenevans.arsbotania.core.divine.ArcanistClass;
 import com.arthurchenevans.arsbotania.core.divine.ArmorSlot;
+import com.arthurchenevans.arsbotania.core.divine.BotaniaSetBonuses;
 import com.arthurchenevans.arsbotania.core.divine.DivineArmorSettings;
 import com.arthurchenevans.arsbotania.core.divine.DivineBonuses;
 import com.arthurchenevans.arsbotania.core.divine.DivinePiece;
@@ -22,6 +23,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,7 +37,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import vazkii.botania.api.item.ManaProficiencyArmor;
 import vazkii.botania.api.mana.ManaDiscountArmor;
+import vazkii.botania.client.gui.TooltipHandler;
+import vazkii.botania.common.handler.PixieHandler;
+import vazkii.botania.common.proxy.Proxy;
 
 import java.util.List;
 
@@ -43,7 +49,7 @@ import java.util.List;
  * A Divine armor piece. Built on Ars Nouveau's armor so threads, dyeing and the
  * GeckoLib model all behave like the Ars piece it comes from; stats come from config.
  */
-public class DivineArmorItem extends AnimatedMagicArmor implements ManaDiscountArmor {
+public class DivineArmorItem extends AnimatedMagicArmor implements ManaDiscountArmor, ManaProficiencyArmor {
     private final DivinePiece piece;
 
     public DivineArmorItem(DivinePiece piece, Holder<ArmorMaterial> material) {
@@ -105,6 +111,8 @@ public class DivineArmorItem extends AnimatedMagicArmor implements ManaDiscountA
                 .add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, s.toughnessPerPiece(), AttributeModifier.Operation.ADD_VALUE), group)
                 .add(PerkAttributes.MAX_MANA, new AttributeModifier(id, s.arsMaxManaPerPiece(), AttributeModifier.Operation.ADD_VALUE), group)
                 .add(PerkAttributes.MANA_REGEN_BONUS, new AttributeModifier(id, s.arsManaRegenPerPiece(), AttributeModifier.Operation.ADD_VALUE), group)
+                // Elementium: Botania spawns pixies from this attribute when the wearer is hurt
+                .add(PixieHandler.PIXIE_SPAWN_CHANCE, PixieHandler.makeModifier(id, s.pixieChance(piece.slot())), group)
                 .build();
 
         ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);
@@ -121,11 +129,25 @@ public class DivineArmorItem extends AnimatedMagicArmor implements ManaDiscountA
         return (float) DivineBonuses.discountReportedBy(piece.slot(), DivineItems.loadoutOf(player), DivineConfig.settings());
     }
 
-    /** Ars prints "Tier N" here; Divine has no tier, so only the threads are listed. */
+    /** Manaweave set bonus: proficiency with Botania rods. */
+    @Override
+    public boolean shouldGiveProficiency(ItemStack stack, EquipmentSlot slot, Player player, ItemStack rod) {
+        return new BotaniaSetBonuses(DivineConfig.settings()).givesRodProficiency(DivineItems.loadoutOf(player));
+    }
+
+    /**
+     * Ars prints "Tier N" here; Divine has no tier, so only the threads are listed.
+     * The Botania-style set bonus list shows on shift, like Botania's own armor.
+     */
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.arsbotania.divine").withStyle(ChatFormatting.GOLD));
         ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);
         if (holder != null) holder.appendPerkTooltip(tooltip, stack);
+        TooltipHandler.addOnShift(tooltip, flag, () -> {
+            Player player = Proxy.INSTANCE.getClientPlayer();
+            int worn = player == null ? 0 : DivineItems.loadoutOf(player).count();
+            tooltip.addAll(DivineSetTooltip.lines(stack, worn));
+        });
     }
 }

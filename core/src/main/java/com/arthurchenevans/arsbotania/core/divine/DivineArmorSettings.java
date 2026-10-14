@@ -16,7 +16,13 @@ public final class DivineArmorSettings {
     private final double toughnessPerPiece;
     private final int botaniaManaRegenPerPiece;
     private final double botaniaToolDiscountPerPiece;
-    private final double fullSetBotaniaToolDiscount;
+    private final double terrasteelSetDiscount;
+    private final double manaweaveSetDiscount;
+    private final Map<ArmorSlot, Double> pixieChance;
+    private final float terrasteelHungerRegen;
+    private final int terrasteelHungerRegenIntervalTicks;
+    private final int terrasteelTabletMana;
+    private final int terrasteelTabletManaIntervalTicks;
     private final double healthRegenPerPiece;
     private final int healthRegenIntervalTicks;
     private final int arsMaxManaPerPiece;
@@ -28,7 +34,13 @@ public final class DivineArmorSettings {
         this.toughnessPerPiece = b.toughnessPerPiece;
         this.botaniaManaRegenPerPiece = b.botaniaManaRegenPerPiece;
         this.botaniaToolDiscountPerPiece = b.botaniaToolDiscountPerPiece;
-        this.fullSetBotaniaToolDiscount = b.fullSetBotaniaToolDiscount;
+        this.terrasteelSetDiscount = b.terrasteelSetDiscount;
+        this.manaweaveSetDiscount = b.manaweaveSetDiscount;
+        this.pixieChance = Map.copyOf(b.pixieChance);
+        this.terrasteelHungerRegen = b.terrasteelHungerRegen;
+        this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
+        this.terrasteelTabletMana = b.terrasteelTabletMana;
+        this.terrasteelTabletManaIntervalTicks = b.terrasteelTabletManaIntervalTicks;
         this.healthRegenPerPiece = b.healthRegenPerPiece;
         this.healthRegenIntervalTicks = b.healthRegenIntervalTicks;
         this.arsMaxManaPerPiece = b.arsMaxManaPerPiece;
@@ -46,7 +58,13 @@ public final class DivineArmorSettings {
         b.toughnessPerPiece = toughnessPerPiece;
         b.botaniaManaRegenPerPiece = botaniaManaRegenPerPiece;
         b.botaniaToolDiscountPerPiece = botaniaToolDiscountPerPiece;
-        b.fullSetBotaniaToolDiscount = fullSetBotaniaToolDiscount;
+        b.terrasteelSetDiscount = terrasteelSetDiscount;
+        b.manaweaveSetDiscount = manaweaveSetDiscount;
+        b.pixieChance.putAll(pixieChance);
+        b.terrasteelHungerRegen = terrasteelHungerRegen;
+        b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
+        b.terrasteelTabletMana = terrasteelTabletMana;
+        b.terrasteelTabletManaIntervalTicks = terrasteelTabletManaIntervalTicks;
         b.healthRegenPerPiece = healthRegenPerPiece;
         b.healthRegenIntervalTicks = healthRegenIntervalTicks;
         b.arsMaxManaPerPiece = arsMaxManaPerPiece;
@@ -71,8 +89,35 @@ public final class DivineArmorSettings {
         return botaniaToolDiscountPerPiece;
     }
 
-    public double fullSetBotaniaToolDiscount() {
-        return fullSetBotaniaToolDiscount;
+    /** Terrasteel's full-set tool discount. */
+    public double terrasteelSetDiscount() {
+        return terrasteelSetDiscount;
+    }
+
+    /** Manaweave's full-set tool discount. */
+    public double manaweaveSetDiscount() {
+        return manaweaveSetDiscount;
+    }
+
+    /** Elementium's chance, per piece, that taking a hit summons a pixie. */
+    public double pixieChance(ArmorSlot slot) {
+        return pixieChance.get(slot);
+    }
+
+    public float terrasteelHungerRegen() {
+        return terrasteelHungerRegen;
+    }
+
+    public int terrasteelHungerRegenIntervalTicks() {
+        return terrasteelHungerRegenIntervalTicks;
+    }
+
+    public int terrasteelTabletMana() {
+        return terrasteelTabletMana;
+    }
+
+    public int terrasteelTabletManaIntervalTicks() {
+        return terrasteelTabletManaIntervalTicks;
     }
 
     public double healthRegenPerPiece() {
@@ -102,7 +147,17 @@ public final class DivineArmorSettings {
         private double toughnessPerPiece = 3;
         private int botaniaManaRegenPerPiece = 5;
         private double botaniaToolDiscountPerPiece = 0.05;
-        private double fullSetBotaniaToolDiscount = 0.1;
+        // Botania full-set values: Terrasteel 20%, Manaweave 40%
+        private double terrasteelSetDiscount = 0.2;
+        private double manaweaveSetDiscount = 0.4;
+        // Botania Elementium per-piece pixie chances
+        private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
+                ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
+        // Botania Terrasteel helmet: 1 health every 80 ticks, 10 tablet mana every 10 ticks
+        private float terrasteelHungerRegen = 1f;
+        private int terrasteelHungerRegenIntervalTicks = 80;
+        private int terrasteelTabletMana = 10;
+        private int terrasteelTabletManaIntervalTicks = 10;
         private double healthRegenPerPiece = 0.5;
         private int healthRegenIntervalTicks = 40;
         private int arsMaxManaPerPiece = 200;
@@ -132,8 +187,38 @@ public final class DivineArmorSettings {
             return this;
         }
 
-        public Builder fullSetBotaniaToolDiscount(double v) {
-            fullSetBotaniaToolDiscount = v;
+        public Builder terrasteelSetDiscount(double v) {
+            terrasteelSetDiscount = v;
+            return this;
+        }
+
+        public Builder manaweaveSetDiscount(double v) {
+            manaweaveSetDiscount = v;
+            return this;
+        }
+
+        public Builder pixieChance(ArmorSlot slot, double v) {
+            pixieChance.put(slot, v);
+            return this;
+        }
+
+        public Builder terrasteelHungerRegen(float v) {
+            terrasteelHungerRegen = v;
+            return this;
+        }
+
+        public Builder terrasteelHungerRegenIntervalTicks(int v) {
+            terrasteelHungerRegenIntervalTicks = v;
+            return this;
+        }
+
+        public Builder terrasteelTabletMana(int v) {
+            terrasteelTabletMana = v;
+            return this;
+        }
+
+        public Builder terrasteelTabletManaIntervalTicks(int v) {
+            terrasteelTabletManaIntervalTicks = v;
             return this;
         }
 
@@ -167,11 +252,15 @@ public final class DivineArmorSettings {
             nonNegative("toughnessPerPiece", toughnessPerPiece);
             nonNegative("botaniaManaRegenPerPiece", botaniaManaRegenPerPiece);
             fraction("botaniaToolDiscountPerPiece", botaniaToolDiscountPerPiece);
-            fraction("fullSetBotaniaToolDiscount", fullSetBotaniaToolDiscount);
+            fraction("terrasteelSetDiscount", terrasteelSetDiscount);
+            fraction("manaweaveSetDiscount", manaweaveSetDiscount);
+            pixieChance.forEach((slot, v) -> fraction("pixieChance." + slot, v));
+            nonNegative("terrasteelHungerRegen", terrasteelHungerRegen);
+            positive("terrasteelHungerRegenIntervalTicks", terrasteelHungerRegenIntervalTicks);
+            nonNegative("terrasteelTabletMana", terrasteelTabletMana);
+            positive("terrasteelTabletManaIntervalTicks", terrasteelTabletManaIntervalTicks);
             nonNegative("healthRegenPerPiece", healthRegenPerPiece);
-            if (healthRegenIntervalTicks <= 0) {
-                throw new IllegalArgumentException("healthRegenIntervalTicks must be positive");
-            }
+            positive("healthRegenIntervalTicks", healthRegenIntervalTicks);
             nonNegative("arsMaxManaPerPiece", arsMaxManaPerPiece);
             nonNegative("arsManaRegenPerPiece", arsManaRegenPerPiece);
             for (int level : threadSlotLevels) {
@@ -184,6 +273,10 @@ public final class DivineArmorSettings {
 
         private static void nonNegative(String name, double v) {
             if (v < 0) throw new IllegalArgumentException(name + " must not be negative");
+        }
+
+        private static void positive(String name, int v) {
+            if (v <= 0) throw new IllegalArgumentException(name + " must be positive");
         }
 
         private static void fraction(String name, double v) {
