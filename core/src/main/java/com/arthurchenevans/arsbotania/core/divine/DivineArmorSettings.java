@@ -26,6 +26,8 @@ public final class DivineArmorSettings {
     private final Map<RecipeCost, Integer> costs;
     private final int divineTankCapacity;
     private final int timeRitualMaxGapTicks;
+    private final int michaelHealth;
+    private final int michaelConversionWindowTicks;
     private final Map<ArmorSlot, Double> pixieChance;
     private final float terrasteelHungerRegen;
     private final int terrasteelHungerRegenIntervalTicks;
@@ -52,6 +54,8 @@ public final class DivineArmorSettings {
         this.costs = Map.copyOf(b.costs);
         this.divineTankCapacity = b.divineTankCapacity;
         this.timeRitualMaxGapTicks = b.timeRitualMaxGapTicks;
+        this.michaelHealth = b.michaelHealth;
+        this.michaelConversionWindowTicks = b.michaelConversionWindowTicks;
         this.pixieChance = Map.copyOf(b.pixieChance);
         this.terrasteelHungerRegen = b.terrasteelHungerRegen;
         this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
@@ -84,6 +88,8 @@ public final class DivineArmorSettings {
         b.costs.putAll(costs);
         b.divineTankCapacity = divineTankCapacity;
         b.timeRitualMaxGapTicks = timeRitualMaxGapTicks;
+        b.michaelHealth = michaelHealth;
+        b.michaelConversionWindowTicks = michaelConversionWindowTicks;
         b.pixieChance.putAll(pixieChance);
         b.terrasteelHungerRegen = terrasteelHungerRegen;
         b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
@@ -163,6 +169,15 @@ public final class DivineArmorSettings {
         return timeRitualMaxGapTicks;
     }
 
+    public int michaelHealth() {
+        return michaelHealth;
+    }
+
+    /** How recently (ticks) a player must have hurt Michael to earn virtue runes. */
+    public int michaelConversionWindowTicks() {
+        return michaelConversionWindowTicks;
+    }
+
     /** Elementium's chance, per piece, that taking a hit summons a pixie. */
     public double pixieChance(ArmorSlot slot) {
         return pixieChance.get(slot);
@@ -222,6 +237,8 @@ public final class DivineArmorSettings {
         private final Map<RecipeCost, Integer> costs = new EnumMap<>(RecipeCost.class);
         private int divineTankCapacity = 1_000_000;
         private int timeRitualMaxGapTicks = 100;
+        private int michaelHealth = 800;
+        private int michaelConversionWindowTicks = 600;
         // Botania Elementium per-piece pixie chances
         private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
                 ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
@@ -310,6 +327,16 @@ public final class DivineArmorSettings {
             return this;
         }
 
+        public Builder michaelHealth(int v) {
+            michaelHealth = v;
+            return this;
+        }
+
+        public Builder michaelConversionWindowTicks(int v) {
+            michaelConversionWindowTicks = v;
+            return this;
+        }
+
         public Builder pixieChance(ArmorSlot slot, double v) {
             pixieChance.put(slot, v);
             return this;
@@ -374,6 +401,8 @@ public final class DivineArmorSettings {
             nonNegative("jarRange", jarRange);
             costs.forEach((c, v) -> positive("cost." + c.key(), v));
             positive("timeRitualMaxGapTicks", timeRitualMaxGapTicks);
+            positive("michaelHealth", michaelHealth);
+            positive("michaelConversionWindowTicks", michaelConversionWindowTicks);
             for (RecipeCost c : RecipeCost.values()) {
                 if (c.currency() == RecipeCost.Currency.SOURCE && costs.get(c) > divineTankCapacity) {
                     throw new IllegalArgumentException("divineTankCapacity must hold " + c.key() + " (" + costs.get(c) + ")");

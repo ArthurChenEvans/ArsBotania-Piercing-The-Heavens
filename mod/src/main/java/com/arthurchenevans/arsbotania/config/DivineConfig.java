@@ -28,6 +28,8 @@ public final class DivineConfig {
     private static final Map<RecipeCost, ModConfigSpec.IntValue> COSTS = new java.util.EnumMap<>(RecipeCost.class);
     private static final ModConfigSpec.IntValue TANK_CAPACITY;
     private static final ModConfigSpec.IntValue TIME_RITUAL_GAP;
+    private static final ModConfigSpec.IntValue MICHAEL_HEALTH;
+    private static final ModConfigSpec.IntValue MICHAEL_WINDOW;
     private static final Map<ArmorSlot, ModConfigSpec.DoubleValue> PIXIE_CHANCE = new EnumMap<>(ArmorSlot.class);
     private static final ModConfigSpec.DoubleValue TERRASTEEL_HUNGER_REGEN;
     private static final ModConfigSpec.IntValue TERRASTEEL_HUNGER_REGEN_INTERVAL;
@@ -119,6 +121,12 @@ public final class DivineConfig {
         TIME_RITUAL_GAP = b.comment("Time component: longest gap (ticks) in mana flow before the ritual fails")
                 .defineInRange("time_ritual_max_gap_ticks", d.timeRitualMaxGapTicks(), 1, 24000);
         b.pop();
+
+        b.comment("Michael, the archangel boss").push("michael");
+        MICHAEL_HEALTH = b.defineInRange("health", d.michaelHealth(), 1, 1_000_000);
+        MICHAEL_WINDOW = b.comment("Players who hurt him within this many ticks of his death can earn virtue runes")
+                .defineInRange("conversion_window_ticks", d.michaelConversionWindowTicks(), 1, 72000);
+        b.pop();
         SPEC = b.build();
     }
 
@@ -159,6 +167,8 @@ public final class DivineConfig {
                 .jarRange(JAR_RANGE.get())
                 .divineTankCapacity(TANK_CAPACITY.get())
                 .timeRitualMaxGapTicks(TIME_RITUAL_GAP.get())
+                .michaelHealth(MICHAEL_HEALTH.get())
+                .michaelConversionWindowTicks(MICHAEL_WINDOW.get())
                 .terrasteelHungerRegen(TERRASTEEL_HUNGER_REGEN.get().floatValue())
                 .terrasteelHungerRegenIntervalTicks(TERRASTEEL_HUNGER_REGEN_INTERVAL.get())
                 .terrasteelTabletMana(TERRASTEEL_TABLET_MANA.get())

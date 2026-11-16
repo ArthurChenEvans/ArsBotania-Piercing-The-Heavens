@@ -61,6 +61,10 @@ public final class VisualCheck {
             mc.options.hideGui = true;
             mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
         }
+        if ("michael".equals(PROPERTY)) {
+            michael(mc);
+            return;
+        }
         if (SWEEP != null) {
             sweep(mc);
             return;
@@ -97,6 +101,36 @@ public final class VisualCheck {
         if (step == 20) {
             shot(mc, (stage < SWEEP.length ? "back" : "front") + "_s" + p[0] + "_h" + p[1] + "_t" + p[2]);
         }
+    }
+
+    /** {@code -Darsbotania.visualCheck=michael}: Michael, frozen, from the front and the back. */
+    private static void michael(Minecraft mc) {
+        if (ticks == 1) {
+            mc.getSingleplayerServer().execute(() -> {
+                ServerPlayer player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+                if (player == null) return;
+                player.serverLevel().setDayTime(6000);
+                player.moveTo(player.getX(), player.getY(), player.getZ(), 0, 0);
+                var michael = com.arthurchenevans.arsbotania.registry.ModEntities.MICHAEL.get().create(player.serverLevel());
+                michael.setNoAi(true);
+                michael.moveTo(player.getX(), player.getY() + 0.5, player.getZ() + 4, 180, 0); // facing the player
+                michael.setYHeadRot(180);
+                michael.setYBodyRot(180);
+                player.serverLevel().addFreshEntity(michael);
+            });
+            mc.options.hideGui = true;
+            mc.options.setCameraType(CameraType.FIRST_PERSON);
+        }
+        if (ticks == 200) shot(mc, "front");
+        if (ticks == 205) mc.getSingleplayerServer().execute(() -> {
+            for (var e : mc.getSingleplayerServer().overworld().getEntities(com.arthurchenevans.arsbotania.registry.ModEntities.MICHAEL.get(), x -> true)) {
+                e.setYRot(0);
+                e.setYHeadRot(0);
+                e.setYBodyRot(0);
+            }
+        });
+        if (ticks == 260) shot(mc, "back");
+        if (ticks == 270) mc.stop();
     }
 
     private static void shot(Minecraft mc, String name) {

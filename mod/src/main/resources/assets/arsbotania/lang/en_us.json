@@ -47,5 +47,7 @@
   "item.arsbotania.time_component": "Time Component",
   "item.arsbotania.spacetime_fabric": "Spacetime Fabric",
   "item.arsbotania.divine_ichor": "Divine Ichor",
-  "block.arsbotania.divine_source_tank": "Divine Source Tank"
+  "block.arsbotania.divine_source_tank": "Divine Source Tank",
+  "entity.arsbotania.michael": "Michael, the Archangel",
+  "item.arsbotania.michael_spawn_egg": "Michael Spawn Egg"
 }

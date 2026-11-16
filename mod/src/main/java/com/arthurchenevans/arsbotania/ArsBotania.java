@@ -4,6 +4,7 @@ import com.arthurchenevans.arsbotania.config.DivineConfig;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
 import com.arthurchenevans.arsbotania.registry.ModBlocks;
 import com.arthurchenevans.arsbotania.registry.ModRecipes;
+import com.arthurchenevans.arsbotania.registry.ModEntities;
 import com.arthurchenevans.arsbotania.registry.ModDataComponents;
 import com.arthurchenevans.arsbotania.registry.ModCreativeTabs;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,7 @@ public class ArsBotania {
         DivineItems.register(modBus);
         ModBlocks.register(modBus);
         ModRecipes.register(modBus);
+        ModEntities.register(modBus);
         ModCreativeTabs.register(modBus);
         modBus.addListener(DivineConfig::onLoad);
         modBus.addListener(DivineConfig::onReload);

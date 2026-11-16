@@ -4,6 +4,7 @@ import com.arthurchenevans.arsbotania.ArsBotania;
 import com.arthurchenevans.arsbotania.core.divine.WingStyle;
 import com.arthurchenevans.arsbotania.event.DivineFlightEvents;
 import com.arthurchenevans.arsbotania.item.DivineRobesItem;
+import com.arthurchenevans.arsbotania.registry.ModEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -27,6 +28,11 @@ public final class DivineClient {
     @SubscribeEvent
     public static void registerModels(ModelEvent.RegisterAdditional event) {
         event.register(DivineWingsLayer.DIVINE_WINGS);
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntities.MICHAEL.get(), MichaelRenderer::new);
     }
 
     @SubscribeEvent

@@ -26,6 +26,7 @@ public final class ModCreativeTabs {
                     out.accept(DivineItems.DIVINE_ROD.get());
                     out.accept(ModBlocks.DIVINE_SOURCE_TANK_ITEM.get());
                     ChainItems.all().forEach(out::accept);
+                    out.accept(ModEntities.MICHAEL_SPAWN_EGG.get());
                 })
                 .build());
     }
