@@ -23,6 +23,9 @@ public final class DivineArmorSettings {
     private final int botaniaManaPerArsMana;
     private final int sourcePerArsMana;
     private final int jarRange;
+    private final Map<RecipeCost, Integer> costs;
+    private final int divineTankCapacity;
+    private final int timeRitualMaxGapTicks;
     private final Map<ArmorSlot, Double> pixieChance;
     private final float terrasteelHungerRegen;
     private final int terrasteelHungerRegenIntervalTicks;
@@ -46,6 +49,9 @@ public final class DivineArmorSettings {
         this.botaniaManaPerArsMana = b.botaniaManaPerArsMana;
         this.sourcePerArsMana = b.sourcePerArsMana;
         this.jarRange = b.jarRange;
+        this.costs = Map.copyOf(b.costs);
+        this.divineTankCapacity = b.divineTankCapacity;
+        this.timeRitualMaxGapTicks = b.timeRitualMaxGapTicks;
         this.pixieChance = Map.copyOf(b.pixieChance);
         this.terrasteelHungerRegen = b.terrasteelHungerRegen;
         this.terrasteelHungerRegenIntervalTicks = b.terrasteelHungerRegenIntervalTicks;
@@ -75,6 +81,9 @@ public final class DivineArmorSettings {
         b.botaniaManaPerArsMana = botaniaManaPerArsMana;
         b.sourcePerArsMana = sourcePerArsMana;
         b.jarRange = jarRange;
+        b.costs.putAll(costs);
+        b.divineTankCapacity = divineTankCapacity;
+        b.timeRitualMaxGapTicks = timeRitualMaxGapTicks;
         b.pixieChance.putAll(pixieChance);
         b.terrasteelHungerRegen = terrasteelHungerRegen;
         b.terrasteelHungerRegenIntervalTicks = terrasteelHungerRegenIntervalTicks;
@@ -139,6 +148,21 @@ public final class DivineArmorSettings {
         return jarRange;
     }
 
+    /** Mana or Source cost of a crafting chain step. */
+    public int cost(RecipeCost cost) {
+        return costs.get(cost);
+    }
+
+    /** Source the Divine Source Tank holds. */
+    public int divineTankCapacity() {
+        return divineTankCapacity;
+    }
+
+    /** Longest the time component's altar may go without mana before the ritual fails. */
+    public int timeRitualMaxGapTicks() {
+        return timeRitualMaxGapTicks;
+    }
+
     /** Elementium's chance, per piece, that taking a hit summons a pixie. */
     public double pixieChance(ArmorSlot slot) {
         return pixieChance.get(slot);
@@ -195,6 +219,9 @@ public final class DivineArmorSettings {
         private int botaniaManaPerArsMana = 50;
         private int sourcePerArsMana = 1;
         private int jarRange = 6;
+        private final Map<RecipeCost, Integer> costs = new EnumMap<>(RecipeCost.class);
+        private int divineTankCapacity = 1_000_000;
+        private int timeRitualMaxGapTicks = 100;
         // Botania Elementium per-piece pixie chances
         private final Map<ArmorSlot, Double> pixieChance = new EnumMap<>(Map.of(
                 ArmorSlot.HEAD, 0.11, ArmorSlot.CHEST, 0.17, ArmorSlot.LEGS, 0.15, ArmorSlot.FEET, 0.09));
@@ -210,6 +237,7 @@ public final class DivineArmorSettings {
         private List<Integer> threadSlotLevels = List.of(3, 3, 3);
 
         private Builder() {
+            for (RecipeCost c : RecipeCost.values()) costs.put(c, c.defaultCost());
         }
 
         public Builder defence(ArmorSlot slot, int value) {
@@ -264,6 +292,21 @@ public final class DivineArmorSettings {
 
         public Builder jarRange(int v) {
             jarRange = v;
+            return this;
+        }
+
+        public Builder cost(RecipeCost cost, int value) {
+            costs.put(cost, value);
+            return this;
+        }
+
+        public Builder divineTankCapacity(int v) {
+            divineTankCapacity = v;
+            return this;
+        }
+
+        public Builder timeRitualMaxGapTicks(int v) {
+            timeRitualMaxGapTicks = v;
             return this;
         }
 
@@ -329,6 +372,13 @@ public final class DivineArmorSettings {
             positive("botaniaManaPerArsMana", botaniaManaPerArsMana);
             positive("sourcePerArsMana", sourcePerArsMana);
             nonNegative("jarRange", jarRange);
+            costs.forEach((c, v) -> positive("cost." + c.key(), v));
+            positive("timeRitualMaxGapTicks", timeRitualMaxGapTicks);
+            for (RecipeCost c : RecipeCost.values()) {
+                if (c.currency() == RecipeCost.Currency.SOURCE && costs.get(c) > divineTankCapacity) {
+                    throw new IllegalArgumentException("divineTankCapacity must hold " + c.key() + " (" + costs.get(c) + ")");
+                }
+            }
             pixieChance.forEach((slot, v) -> fraction("pixieChance." + slot, v));
             nonNegative("terrasteelHungerRegen", terrasteelHungerRegen);
             positive("terrasteelHungerRegenIntervalTicks", terrasteelHungerRegenIntervalTicks);

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arsbotania:item/rune_of_diligence"
+  }
+}

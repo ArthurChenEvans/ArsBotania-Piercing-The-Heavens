@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "arsbotania:divine_source_tank",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "ars_nouveau:block_fill_contents"
+              ],
+              "source": "block_entity"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

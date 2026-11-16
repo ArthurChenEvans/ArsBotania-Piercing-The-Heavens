@@ -10,6 +10,34 @@
   - `./gradlew :mod:runClient` — play it. Jar: `mod/build/libs/`.
 - `libs/` — Botania 1.21.1 jar (no official 1.21.1 release yet).
 
+## Beta 3: the crafting chain
+All costs are config values (`crafting_chain` in the config, `RecipeCost`). Botania's altar and
+plate hold exactly what a recipe asks for, so 1M/10M/400M need no block changes.
+| Step | Where | Inputs | Cost (default) |
+|---|---|---|---|
+| Virtue runes (temporary) | Runic Altar | sin rune + Gaia Spirit | 100k mana (until Michael; remove in beta 4) |
+| Rune of Life and Death | Runic Altar | Gaia Spirit Ingot + Ars Wilden Tribute | 500k mana |
+| Yin-Yang | Runic Altar | 7 sin + 7 virtue runes, all consumed | 1M mana |
+| Time Component | Runic Altar, Overworld | Hovering Hourglass, Clock, Echo Shard, Manipulation Essence | 10M mana, overnight ritual |
+| Space Component | Terra Plate, the End only | Pure Ender Essence, Stable Warp Scroll, Dragonstone, End Crystal, Shulker Shell | 10M mana |
+| Spacetime Fabric | Enchanting Apparatus | Space Component (centre) + Time Component | 100k Source (placeholder) |
+| Divine Ichor x4 | Terra Plate | Rune of Life and Death, Yin-Yang, Spacetime Fabric, Terrasteel, Elementium | 400M mana |
+| Divine armor | Enchanting Apparatus | Tier 3 Ars piece (centre) + Ichor + 7 essences | 50k Source; keeps threads |
+| Divine Source Tank | Crafting | 4 Terrasteel, 4 Source jars, Mana Pool | holds 1M Source |
+Notes:
+- Altar/plate recipes subclass Botania's own (`DivineRunicAltarRecipe`, `DivineTerraPlateRecipe`) so
+  `getMana()` reads config; the plate recipe can be pinned to a dimension.
+- Apparatus recipes use our `arsbotania:divine_apparatus` type, added to Ars's apparatus types.
+- Runic altar steps need Botania's livingrock reagent, as all altar crafts do.
+- "Ender Air" is Botania's Pure Ender Essence in 1.21.1; "Wildenbeast Token" is Ars's Wilden Tribute.
+- Time ritual (`TimeRitual`, `TimeRitualTracker`, altar tick mixin): mana arriving outside sunset
+  (12000-13000) is discarded; once started the altar is held one mana short until sunrise (measured in
+  game ticks, so sleeping can't skip it); a gap over `time_ritual_max_gap_ticks` or a missed altar tick
+  (chunk unloaded) loses the mana, the items stay in the altar.
+- Divine Source Tank: an Ars `SourceJarTile` subclass, so apparatus/relays treat it as a jar.
+  Uses Ars's jar model for now.
+- Not yet: Michael (summoning, fight, sin-to-virtue conversion on kill).
+
 ## Beta 2: the Singularity (so far)
 - One tool that mines as pickaxe, axe, shovel and hoe at netherite level, speed from config
   (default 16; Botania Terrasteel is 9). No durability.

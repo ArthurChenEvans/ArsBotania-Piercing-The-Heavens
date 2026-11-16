@@ -1,0 +1,55 @@
+{
+  "type": "arsbotania:runic_altar",
+  "cost": "yin_yang",
+  "ingredients": [
+    {
+      "item": "botania:rune_of_lust"
+    },
+    {
+      "item": "botania:rune_of_gluttony"
+    },
+    {
+      "item": "botania:rune_of_greed"
+    },
+    {
+      "item": "botania:rune_of_sloth"
+    },
+    {
+      "item": "botania:rune_of_wrath"
+    },
+    {
+      "item": "botania:rune_of_envy"
+    },
+    {
+      "item": "botania:rune_of_pride"
+    },
+    {
+      "item": "arsbotania:rune_of_chastity"
+    },
+    {
+      "item": "arsbotania:rune_of_temperance"
+    },
+    {
+      "item": "arsbotania:rune_of_charity"
+    },
+    {
+      "item": "arsbotania:rune_of_diligence"
+    },
+    {
+      "item": "arsbotania:rune_of_patience"
+    },
+    {
+      "item": "arsbotania:rune_of_kindness"
+    },
+    {
+      "item": "arsbotania:rune_of_humility"
+    }
+  ],
+  "reagent": {
+    "item": "botania:livingrock"
+  },
+  "output": {
+    "id": "arsbotania:yin_yang",
+    "count": 1
+  }
+}

@@ -8,7 +8,9 @@
     "PixieEntityAccessor",
     "SpellResolverMixin",
     "BotaniaRodLeftClickMixin$ShiftingCrust",
-    "BotaniaRodLeftClickMixin$ShadedMesa"
+    "BotaniaRodLeftClickMixin$ShadedMesa",
+    "RunicAltarAccessor",
+    "RunicAltarTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1

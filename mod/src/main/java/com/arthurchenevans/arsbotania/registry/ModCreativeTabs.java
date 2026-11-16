@@ -24,6 +24,8 @@ public final class ModCreativeTabs {
                     out.accept(DivineItems.DIVINE_BLADE.get());
                     out.accept(DivineItems.DIVINE_GRIMOIRE.get());
                     out.accept(DivineItems.DIVINE_ROD.get());
+                    out.accept(ModBlocks.DIVINE_SOURCE_TANK_ITEM.get());
+                    ChainItems.all().forEach(out::accept);
                 })
                 .build());
     }

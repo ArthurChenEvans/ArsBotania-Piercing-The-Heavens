@@ -2,6 +2,8 @@ package com.arthurchenevans.arsbotania;
 
 import com.arthurchenevans.arsbotania.config.DivineConfig;
 import com.arthurchenevans.arsbotania.registry.DivineItems;
+import com.arthurchenevans.arsbotania.registry.ModBlocks;
+import com.arthurchenevans.arsbotania.registry.ModRecipes;
 import com.arthurchenevans.arsbotania.registry.ModDataComponents;
 import com.arthurchenevans.arsbotania.registry.ModCreativeTabs;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,8 @@ public class ArsBotania {
         container.registerConfig(ModConfig.Type.COMMON, DivineConfig.SPEC);
         ModDataComponents.register(modBus);
         DivineItems.register(modBus);
+        ModBlocks.register(modBus);
+        ModRecipes.register(modBus);
         ModCreativeTabs.register(modBus);
         modBus.addListener(DivineConfig::onLoad);
         modBus.addListener(DivineConfig::onReload);
@@ -26,7 +30,10 @@ public class ArsBotania {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(DivineItems::registerThreadSlots);
+        event.enqueueWork(() -> {
+            DivineItems.registerThreadSlots();
+            ModRecipes.registerWithArs();
+        });
     }
 
     public static ResourceLocation prefix(String path) {

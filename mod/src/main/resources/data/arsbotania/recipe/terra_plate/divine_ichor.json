@@ -1,0 +1,25 @@
+{
+  "type": "arsbotania:terra_plate",
+  "cost": "divine_ichor",
+  "ingredients": [
+    {
+      "item": "arsbotania:rune_of_life_and_death"
+    },
+    {
+      "item": "arsbotania:yin_yang"
+    },
+    {
+      "item": "arsbotania:spacetime_fabric"
+    },
+    {
+      "item": "botania:terrasteel_ingot"
+    },
+    {
+      "item": "botania:elementium_ingot"
+    }
+  ],
+  "output": {
+    "id": "arsbotania:divine_ichor",
+    "count": 4
+  }
+}

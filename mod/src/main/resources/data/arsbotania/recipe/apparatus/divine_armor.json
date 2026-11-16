@@ -1,0 +1,29 @@
+{
+  "type": "arsbotania:divine_armor_infusion",
+  "pedestals": [
+    {
+      "item": "arsbotania:divine_ichor"
+    },
+    {
+      "item": "ars_nouveau:abjuration_essence"
+    },
+    {
+      "item": "ars_nouveau:conjuration_essence"
+    },
+    {
+      "item": "ars_nouveau:air_essence"
+    },
+    {
+      "item": "ars_nouveau:earth_essence"
+    },
+    {
+      "item": "ars_nouveau:fire_essence"
+    },
+    {
+      "item": "ars_nouveau:manipulation_essence"
+    },
+    {
+      "item": "ars_nouveau:water_essence"
+    }
+  ]
+}

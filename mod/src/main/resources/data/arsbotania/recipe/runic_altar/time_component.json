@@ -1,0 +1,26 @@
+{
+  "type": "arsbotania:runic_altar",
+  "cost": "time_component",
+  "time_ritual": true,
+  "ingredients": [
+    {
+      "item": "botania:hovering_hourglass"
+    },
+    {
+      "item": "minecraft:clock"
+    },
+    {
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "ars_nouveau:manipulation_essence"
+    }
+  ],
+  "reagent": {
+    "item": "botania:livingrock"
+  },
+  "output": {
+    "id": "arsbotania:time_component",
+    "count": 1
+  }
+}

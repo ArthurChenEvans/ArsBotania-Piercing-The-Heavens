@@ -1,0 +1,20 @@
+{
+  "type": "botania:runic_altar",
+  "mana": 100000,
+  "ingredients": [
+    {
+      "item": "botania:rune_of_sloth"
+    },
+    {
+      "item": "botania:gaia_spirit"
+    }
+  ],
+  "catalysts": [],
+  "reagent": {
+    "item": "botania:livingrock"
+  },
+  "output": {
+    "id": "arsbotania:rune_of_diligence",
+    "count": 1
+  }
+}

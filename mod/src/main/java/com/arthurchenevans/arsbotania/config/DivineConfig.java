@@ -2,6 +2,7 @@ package com.arthurchenevans.arsbotania.config;
 
 import com.arthurchenevans.arsbotania.core.divine.ArmorSlot;
 import com.arthurchenevans.arsbotania.core.divine.DivineArmorSettings;
+import com.arthurchenevans.arsbotania.core.divine.RecipeCost;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -24,6 +25,9 @@ public final class DivineConfig {
     private static final ModConfigSpec.IntValue BOTANIA_PER_ARS;
     private static final ModConfigSpec.IntValue SOURCE_PER_ARS;
     private static final ModConfigSpec.IntValue JAR_RANGE;
+    private static final Map<RecipeCost, ModConfigSpec.IntValue> COSTS = new java.util.EnumMap<>(RecipeCost.class);
+    private static final ModConfigSpec.IntValue TANK_CAPACITY;
+    private static final ModConfigSpec.IntValue TIME_RITUAL_GAP;
     private static final Map<ArmorSlot, ModConfigSpec.DoubleValue> PIXIE_CHANCE = new EnumMap<>(ArmorSlot.class);
     private static final ModConfigSpec.DoubleValue TERRASTEEL_HUNGER_REGEN;
     private static final ModConfigSpec.IntValue TERRASTEEL_HUNGER_REGEN_INTERVAL;
@@ -104,6 +108,17 @@ public final class DivineConfig {
         JAR_RANGE = b.comment("How far (blocks) to look for Source jars; 0 turns jar top-ups off")
                 .defineInRange("jar_range", d.jarRange(), 0, 32);
         b.pop();
+
+        b.comment("The crafting chain. Botania mana costs for altar and plate steps, Source for apparatus steps").push("crafting_chain");
+        for (RecipeCost c : RecipeCost.values()) {
+            COSTS.put(c, b.comment(c.currency() == RecipeCost.Currency.SOURCE ? "Source" : "Botania mana")
+                    .defineInRange(c.key(), d.cost(c), 1, Integer.MAX_VALUE));
+        }
+        TANK_CAPACITY = b.worldRestart().comment("Source the Divine Source Tank holds; must cover the biggest Source cost")
+                .defineInRange("divine_source_tank_capacity", d.divineTankCapacity(), 1, Integer.MAX_VALUE);
+        TIME_RITUAL_GAP = b.comment("Time component: longest gap (ticks) in mana flow before the ritual fails")
+                .defineInRange("time_ritual_max_gap_ticks", d.timeRitualMaxGapTicks(), 1, 24000);
+        b.pop();
         SPEC = b.build();
     }
 
@@ -131,6 +146,7 @@ public final class DivineConfig {
         DivineArmorSettings.Builder s = DivineArmorSettings.defaults().toBuilder();
         DEFENCE.forEach((slot, v) -> s.defence(slot, v.get()));
         PIXIE_CHANCE.forEach((slot, v) -> s.pixieChance(slot, v.get()));
+        COSTS.forEach((c, v) -> s.cost(c, v.get()));
         return s.toughnessPerPiece(TOUGHNESS.get())
                 .botaniaManaRegenPerPiece(BOTANIA_MANA_REGEN.get())
                 .botaniaToolDiscountPerPiece(BOTANIA_DISCOUNT.get())
@@ -141,6 +157,8 @@ public final class DivineConfig {
                 .botaniaManaPerArsMana(BOTANIA_PER_ARS.get())
                 .sourcePerArsMana(SOURCE_PER_ARS.get())
                 .jarRange(JAR_RANGE.get())
+                .divineTankCapacity(TANK_CAPACITY.get())
+                .timeRitualMaxGapTicks(TIME_RITUAL_GAP.get())
                 .terrasteelHungerRegen(TERRASTEEL_HUNGER_REGEN.get().floatValue())
                 .terrasteelHungerRegenIntervalTicks(TERRASTEEL_HUNGER_REGEN_INTERVAL.get())
                 .terrasteelTabletMana(TERRASTEEL_TABLET_MANA.get())

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "botania:terrasteel_ingot"
+    },
+    "J": {
+      "item": "ars_nouveau:source_jar"
+    },
+    "P": {
+      "item": "botania:mana_pool"
+    }
+  },
+  "pattern": [
+    "TJT",
+    "JPJ",
+    "TJT"
+  ],
+  "result": {
+    "id": "arsbotania:divine_source_tank",
+    "count": 1
+  }
+}

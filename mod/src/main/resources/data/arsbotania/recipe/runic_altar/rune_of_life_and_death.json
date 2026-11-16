@@ -1,0 +1,19 @@
+{
+  "type": "arsbotania:runic_altar",
+  "cost": "rune_of_life_and_death",
+  "ingredients": [
+    {
+      "item": "botania:gaia_ingot"
+    },
+    {
+      "item": "ars_nouveau:wilden_tribute"
+    }
+  ],
+  "reagent": {
+    "item": "botania:livingrock"
+  },
+  "output": {
+    "id": "arsbotania:rune_of_life_and_death",
+    "count": 1
+  }
+}

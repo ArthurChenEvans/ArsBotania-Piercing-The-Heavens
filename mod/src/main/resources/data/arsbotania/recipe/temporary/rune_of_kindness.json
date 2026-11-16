@@ -1,0 +1,20 @@
+{
+  "type": "botania:runic_altar",
+  "mana": 100000,
+  "ingredients": [
+    {
+      "item": "botania:rune_of_envy"
+    },
+    {
+      "item": "botania:gaia_spirit"
+    }
+  ],
+  "catalysts": [],
+  "reagent": {
+    "item": "botania:livingrock"
+  },
+  "output": {
+    "id": "arsbotania:rune_of_kindness",
+    "count": 1
+  }
+}

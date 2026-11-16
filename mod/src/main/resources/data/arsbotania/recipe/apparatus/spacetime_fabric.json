@@ -1,0 +1,16 @@
+{
+  "type": "arsbotania:apparatus",
+  "cost": "spacetime_fabric",
+  "reagent": {
+    "item": "arsbotania:space_component"
+  },
+  "pedestals": [
+    {
+      "item": "arsbotania:time_component"
+    }
+  ],
+  "result": {
+    "id": "arsbotania:spacetime_fabric",
+    "count": 1
+  }
+}

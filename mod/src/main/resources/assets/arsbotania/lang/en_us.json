@@ -33,5 +33,19 @@
   "item.arsbotania.divine_rod": "Divine Rod",
   "tooltip.arsbotania.grimoire.pool": "Short on mana? Draws Source from nearby jars, then Botania mana",
   "tooltip.arsbotania.rod.cycle": "Sneak + use to change power",
-  "tooltip.arsbotania.combo": "Hold the Grimoire and Rod together: left hand acts first"
+  "tooltip.arsbotania.combo": "Hold the Grimoire and Rod together: left hand acts first",
+  "item.arsbotania.rune_of_chastity": "Rune of Chastity",
+  "item.arsbotania.rune_of_temperance": "Rune of Temperance",
+  "item.arsbotania.rune_of_charity": "Rune of Charity",
+  "item.arsbotania.rune_of_diligence": "Rune of Diligence",
+  "item.arsbotania.rune_of_patience": "Rune of Patience",
+  "item.arsbotania.rune_of_kindness": "Rune of Kindness",
+  "item.arsbotania.rune_of_humility": "Rune of Humility",
+  "item.arsbotania.rune_of_life_and_death": "Rune of Life and Death",
+  "item.arsbotania.yin_yang": "Yin-Yang",
+  "item.arsbotania.space_component": "Space Component",
+  "item.arsbotania.time_component": "Time Component",
+  "item.arsbotania.spacetime_fabric": "Spacetime Fabric",
+  "item.arsbotania.divine_ichor": "Divine Ichor",
+  "block.arsbotania.divine_source_tank": "Divine Source Tank"
 }

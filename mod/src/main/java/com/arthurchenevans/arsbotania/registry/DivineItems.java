@@ -69,6 +69,7 @@ public final class DivineItems {
     }
 
     public static void register(IEventBus modBus) {
+        ChainItems.init();
         MATERIALS.register(modBus);
         ITEMS.register(modBus);
     }

@@ -1,0 +1,26 @@
+{
+  "type": "arsbotania:terra_plate",
+  "cost": "space_component",
+  "dimension": "minecraft:the_end",
+  "ingredients": [
+    {
+      "item": "botania:pure_ender_essence"
+    },
+    {
+      "item": "ars_nouveau:stable_warp_scroll"
+    },
+    {
+      "item": "botania:dragonstone"
+    },
+    {
+      "item": "minecraft:end_crystal"
+    },
+    {
+      "item": "minecraft:shulker_shell"
+    }
+  ],
+  "output": {
+    "id": "arsbotania:space_component",
+    "count": 1
+  }
+}
