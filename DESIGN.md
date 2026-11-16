@@ -36,7 +36,12 @@ Notes:
   (chunk unloaded) loses the mana, the items stay in the altar.
 - Divine Source Tank: an Ars `SourceJarTile` subclass, so apparatus/relays treat it as a jar.
   Uses Ars's jar model for now.
-- Not yet: Michael (summoning, fight, sin-to-virtue conversion on kill).
+- Michael (`MichaelEntity`): summoned by using a Gaia Spirit Ingot on an active beacon (one per
+  beacon, re-summonable). Player model in the user's skin with Botania's Flugel wings and halo.
+  Flies near the beacon (16-block arena), teleports beside players, fires Botania's Gaia missiles,
+  lightning below half health. 800 health (config). On death, everyone who hit him in the last
+  600 ticks (config) and carries all 7 sin runes has one of each turned into its virtue.
+  Fight design is a first pass; the temporary virtue recipes can go once it's signed off.
 
 ## Beta 2: the Singularity (so far)
 - One tool that mines as pickaxe, axe, shovel and hoe at netherite level, speed from config

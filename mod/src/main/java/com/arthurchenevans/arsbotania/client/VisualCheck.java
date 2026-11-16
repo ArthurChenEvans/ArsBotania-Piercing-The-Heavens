@@ -41,6 +41,10 @@ public final class VisualCheck {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.getSingleplayerServer() == null) return;
         ticks++;
+        if ("michael".equals(PROPERTY)) {
+            michael(mc);
+            return;
+        }
 
         if (ticks == 1) {
             ArcanistClass cls = ArcanistClass.valueOf(PROPERTY.toUpperCase());
@@ -60,10 +64,6 @@ public final class VisualCheck {
             });
             mc.options.hideGui = true;
             mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-        }
-        if ("michael".equals(PROPERTY)) {
-            michael(mc);
-            return;
         }
         if (SWEEP != null) {
             sweep(mc);

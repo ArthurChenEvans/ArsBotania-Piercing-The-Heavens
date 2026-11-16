@@ -46,6 +46,7 @@ class GrimoireAndRodItemTest {
         for (String tex : new String[]{"divine_grimoire", "divine_rod"}) {
             assertNotNull(getClass().getResourceAsStream("/assets/arsbotania/textures/item/" + tex + ".png"), tex);
             assertNotNull(getClass().getResourceAsStream("/assets/arsbotania/textures/item/" + tex + ".png.mcmeta"), tex);
+            assertNotNull(getClass().getResourceAsStream("/assets/arsbotania/models/item/" + tex + ".json"), tex + " item model");
         }
     }
 }
